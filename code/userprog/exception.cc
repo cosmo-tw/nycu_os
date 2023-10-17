@@ -122,7 +122,7 @@ ExceptionHandler(ExceptionType which)
 			{
 				/* This is the New add function */
 				val = kernel->machine->ReadRegister(4);
-				cout << "return value:" << val << endl;
+				cout << "Return Value:" << val << endl;
 				// SysPrintInt(val);
 				// Set Program Counter
 				kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));

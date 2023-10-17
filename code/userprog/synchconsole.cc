@@ -92,19 +92,6 @@ SynchConsoleOutput::~SynchConsoleOutput()
     delete waitFor;
 }
 
-/* This is the new add function */
-void
-SynchConsoleOutput::PutInt(int value)
-{
-    char str[15];
-    int idx=0;
-    do{
-    consoleOutput->PutChar(str[idx]);
-    waitFor->P(); // wait for EOF or a char to be available.
-    } while (str[idx] != '\0');
-    lock->Release();  // 執行完同步化，解除鎖定
-}
-
 //----------------------------------------------------------------------
 // SynchConsoleOutput::PutChar
 //      Write a character to the console display, waiting if necessary.
