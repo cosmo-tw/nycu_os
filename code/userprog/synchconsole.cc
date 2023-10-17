@@ -63,7 +63,7 @@ void
 SynchConsoleOutput::PutInt(int value)
 {
     char str[15];
-    int idx=0;
+    int idx = 0;
     sprintf(str, "%d\n\0", value); //simply for trace code
     lock->Acquire(); //鎖定物件，開始執行同步化
     do{
