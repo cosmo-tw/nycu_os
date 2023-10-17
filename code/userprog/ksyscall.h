@@ -34,4 +34,10 @@ int SysCreate(char *filename)
 	return kernel->interrupt->CreateFile(filename);
 }
 
+/* This is new add function for HW Part2-1 */
+void SysPrintInt(int val)
+{
+	kernel->synchConsoleOut->PutInt(val);
+}
+
 #endif /* ! __USERPROG_KSYSCALL_H__ */
