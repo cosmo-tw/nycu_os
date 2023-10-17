@@ -53,7 +53,7 @@
 /* Stop Nachos, and print out performance stats */
 void Halt();			
  
-/* (New Add!) Print the integer*/
+/* (New Add!) Print the integer */
 void PrintInt (int number);
 
 /*

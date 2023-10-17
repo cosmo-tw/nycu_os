@@ -120,10 +120,10 @@ ExceptionHandler(ExceptionType which)
             break;
 		case SC_PrintInt:
 			{
-				/* This is the New add function */
+				/* This is the New add function for HW1 Part2-1 */
+				/* 確定有進到這裡來 */
 				val = kernel->machine->ReadRegister(4);
-				cout << "Return Value:" << val << endl;
-				// SysPrintInt(val);
+				SysPrintInt(val);
 				// Set Program Counter
 				kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 				kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
