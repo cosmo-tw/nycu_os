@@ -62,7 +62,7 @@ class FileSystem {
     bool Remove(char *name) { return Unlink(name) == 0; }
 
 	OpenFile *fileDescriptorTable[20];
-	
+
 };
 
 #else // FILESYS

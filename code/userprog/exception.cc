@@ -129,6 +129,22 @@ ExceptionHandler(ExceptionType which)
 			return;
 			ASSERTNOTREACHED();
             break;
+
+		case SC_Open:
+			val = kernel->machine->ReadRegister(4);
+			
+			char *filename = &(kernel->machine->mainMemory[val]);
+			//cout << filename << endl;
+			status = SysOpen(filename); // SysOpen in ksyscall.h
+
+			kernel->machine->WriteRegister(2, (int) status);
+			
+			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+			return;
+			ASSERTNOTREACHED();
+            break;
 			
 
       	default:
