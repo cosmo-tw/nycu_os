@@ -113,7 +113,7 @@ PROGRAMS = unknownhost
 else
 # change this if you create a new test program!
 # PROGRAMS = add halt consoleIO_test1 consoleIO_test2 fileIO_test1 fileIO_test2
-PROGRAMS = fileIO_test1
+PROGRAMS = fileIO_test2
 endif
 
 all: $(PROGRAMS)
