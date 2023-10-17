@@ -34,6 +34,7 @@
 #define SC_ExecV	13
 #define SC_ThreadExit   14
 #define SC_ThreadJoin   15
+#define SC_PrintInt 16
 #define SC_Add		42
 #define SC_MSG		100
 
@@ -76,6 +77,9 @@ typedef int ThreadId;
 /* Run the specified executable, with no args */
 /* This can be implemented as a call to ExecV.
  */ 
+
+void PrintInt (int number);
+
 SpaceId Exec(char* exec_name);
 
 /* Run the executable, stored in the Nachos file "argv[0]", with

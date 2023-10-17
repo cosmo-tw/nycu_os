@@ -118,6 +118,19 @@ ExceptionHandler(ExceptionType which)
             cout << "return value:" << val << endl;
 			kernel->currentThread->Finish();
             break;
+		case SC_PrintInt:
+			{
+				val = kernel->machine->ReadRegister(4);
+				SysPrintInt(val);
+				// Set Program Counter
+				kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+				kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+				kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+				return;
+				ASSERTNOTREACHED();
+				break;
+			}
+
       	default:
 			cerr << "Unexpected system call " << type << "\n";
 			break;

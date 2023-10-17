@@ -92,6 +92,21 @@ SynchConsoleOutput::~SynchConsoleOutput()
     delete waitFor;
 }
 
+void
+SynchConsoleOutput::PutInt(int value)
+{
+    char str[15];
+    int idx=0;
+    //sprintf(str, "%d\n\0", value); the true one
+    sprintf(str, "%d\n\0", value); //simply for trace code
+    lock->Acquire(); //鎖定物件，開始執行同步化
+    do{
+    consoleOutput->PutChar(str[idx]);
+    waitFor->P(); // wait for EOF or a char to be available.
+    } while (str[idx] != '\0');
+    lock->Release();  // 執行完同步化，解除鎖定
+}
+
 //----------------------------------------------------------------------
 // SynchConsoleOutput::PutChar
 //      Write a character to the console display, waiting if necessary.
