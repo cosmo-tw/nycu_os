@@ -72,6 +72,7 @@ SynchConsoleOutput::PutInt(int value)
     waitFor->P(); // wait for EOF or a char to be available.
     } while (str[idx] != '\0');
     lock->Release(); // 執行完同步化，解除鎖定
+    cout<< "YES\n" << endl;
 }
 
 //----------------------------------------------------------------------
