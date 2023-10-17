@@ -92,6 +92,7 @@ SynchConsoleOutput::~SynchConsoleOutput()
     delete waitFor;
 }
 
+/* This is the new add function */
 void
 SynchConsoleOutput::PutInt(int value)
 {

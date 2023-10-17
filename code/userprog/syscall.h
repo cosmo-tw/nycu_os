@@ -53,6 +53,9 @@
 /* Stop Nachos, and print out performance stats */
 void Halt();			
  
+/* (New Add!) Print the integer*/
+void PrintInt (int number);
+
 /*
  * Add the two operants and return the result
  */ 
@@ -77,8 +80,6 @@ typedef int ThreadId;
 /* Run the specified executable, with no args */
 /* This can be implemented as a call to ExecV.
  */ 
-
-void PrintInt (int number);
 
 SpaceId Exec(char* exec_name);
 

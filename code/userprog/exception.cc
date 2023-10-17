@@ -120,6 +120,7 @@ ExceptionHandler(ExceptionType which)
             break;
 		case SC_PrintInt:
 			{
+				/* This is the New add function */
 				val = kernel->machine->ReadRegister(4);
 				SysPrintInt(val);
 				// Set Program Counter

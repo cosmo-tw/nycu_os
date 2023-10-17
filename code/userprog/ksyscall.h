@@ -34,6 +34,7 @@ int SysCreate(char *filename)
 	return kernel->interrupt->CreateFile(filename);
 }
 
+/* This is the new add function */
 void SysPrintInt(int val)
 {
 	kernel->synchConsoleOut->PutInt(val);
