@@ -186,6 +186,14 @@ ThreadJoin:
 	j 	$31
 	.end ThreadJoin
 
+PrintInt:
+	addiu $2,$0,SC_PrintInt
+	syscall
+	j	$31
+	.end PrintInt
+	.globl PrintInt
+	.ent PrintInt
+
 
 /* dummy function to keep gcc happy */
         .globl  __main
