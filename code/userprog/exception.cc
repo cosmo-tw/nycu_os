@@ -122,6 +122,7 @@ ExceptionHandler(ExceptionType which)
 			{
 				/* This is the New add function */
 				val = kernel->machine->ReadRegister(4);
+				printf("%d\n",val);
 				SysPrintInt(val);
 				// Set Program Counter
 				kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
