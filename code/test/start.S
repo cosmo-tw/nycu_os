@@ -50,6 +50,14 @@ Halt:
 	j	$31
 	.end Halt
 
+	.globl PrintInt
+	.ent PrintInt
+PrintInt:
+	addiu $2,$0,SC_PrintInt
+	syscall
+	j	$31
+	.end PrintInt
+
 	.globl MSG
 	.ent   MSG
 MSG:
@@ -186,13 +194,7 @@ ThreadJoin:
 	j 	$31
 	.end ThreadJoin
 	
-	.globl PrintInt
-	.ent PrintInt
-PrintInt:
-	addiu $2,$0,SC_PrintInt
-	syscall
-	j	$31
-	.end PrintInt
+	
 
 
 
