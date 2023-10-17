@@ -119,9 +119,8 @@ ExceptionHandler(ExceptionType which)
 			kernel->currentThread->Finish();
             break;
 		case SC_PrintInt:
-			{
+			
 				/* This is the New add function for HW1 Part2-1 */
-				/* 確定有進到這裡來 */
 				val = kernel->machine->ReadRegister(4);
 				SysPrintInt(val);
 				// Set Program Counter
@@ -131,7 +130,7 @@ ExceptionHandler(ExceptionType which)
 				return;
 				ASSERTNOTREACHED();
 				break;
-			}
+			
 
       	default:
 			cerr << "Unexpected system call " << type << "\n";
