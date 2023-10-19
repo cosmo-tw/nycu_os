@@ -129,6 +129,7 @@ ExceptionHandler(ExceptionType which)
 			val = kernel->machine->ReadRegister(4);
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
+			cout<< "status="<< status <<endl;
 			kernel->machine->WriteRegister(2, (int) status);
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
