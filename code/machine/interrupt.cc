@@ -373,3 +373,21 @@ Interrupt::OpenAFile(char *name)
     return fileDescriptor;
 }
 
+int 
+Interrupt::WriteAFile(char *buffer, int size, int id)
+{
+    WriteFile(id, buffer, size);
+    return size;
+}
+
+// int
+// Interrupt::ReadAFile(char *buffer, int size, int id)
+// {
+//     return kernel->ReadFile(buffer, size, id);
+// }
+
+int
+Interrupt::CloseAFile(int id)
+{
+    return Close(id);
+}

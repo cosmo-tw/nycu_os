@@ -50,19 +50,19 @@ OpenFileId SysOpen(char *name)
 	return kernel->interrupt->OpenAFile(name);
 }
 
-// int SysWrite(char *buffer, int size, OpenFileId id)
-// {
-// 	return kernel->fileSystem->WriteAFile(buffer, size, id);
-// }
+int SysWrite(char *buffer, int size, OpenFileId id)
+{
+	return kernel->interrupt->WriteAFile(buffer, size, id);
+}
 
 // int SysRead(char *buffer, int size, OpenFileId id)
 // {
-//   return kernel->fileSystem->ReadAFile(buffer, size, id);
+//   return kernel->interrupt->ReadAFile(buffer, size, id);
 // }
 
-// int SysClose(OpenFileId id)
-// {
-//   return kernel->fileSystem->CloseAFile(id);
-// }
+int SysClose(OpenFileId id)
+{
+  return kernel->interrupt->CloseAFile(id);
+}
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */
