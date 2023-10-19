@@ -150,14 +150,14 @@ ExceptionHandler(ExceptionType which)
 			/* buffer = file1.test，也就是Create出來的檔案的名字 */
 			/* 這裡很奇怪，如果引數是按順序放在Register中，那ReadRegister(4)出來的應該要是test + i的東西 */
 			/* 不應該可以做為主記憶體的位置查詢才對，那是id的事情(大概)，理應在Register(6)中取得 */
-			char *buffer = &(kernel->machine->mainMemory[1]);
+			char *buffer = &(kernel->machine->mainMemory[val]);
 			cout << "buffer = " << buffer << endl;
 
 			/* size = 2021095029 */
 			/* 按順序這裡應該要提出 1 ，為Write的第2個引數 */
 			/* 用這個值去查找mainMemory是沒東西的*/
 			/* 意外：ReadRegister(3)會讀出1*/
-			int size    = kernel->machine->ReadRegister(3);
+			int size    = kernel->machine->ReadRegister(1);
 			cout << "size = " << size << endl;
 
 			/* fileID = 121 */
