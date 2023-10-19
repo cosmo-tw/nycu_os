@@ -64,14 +64,17 @@ SynchConsoleOutput::PutInt(int value)
 {
     char str[15];
     int idx = 0;
-    sprintf(str, "%d\n\0", value); //simply for trace code
-    lock->Acquire(); //鎖定物件，開始執行同步化
-    do{
-    consoleOutput->PutChar(str[idx]); // 一個一個字元丟入consoleOutput.cc裡的PutChar()函數
-    idx++; //換下一個字元執行
-    waitFor->P(); // wait for EOF or a char to be available.
-    } while (str[idx] != '\0');
-    lock->Release(); // 執行完同步化，解除鎖定
+    sprintf(str, "%d\n\0", value); // Convert integer to string and add a newline character at the end
+
+    lock->Acquire(); // Acquire a lock for synchronization
+
+    do {
+        consoleOutput->PutChar(str[idx]); // Put each character into consoleOutput using PutChar() function
+        idx++; // Move to the next character
+        waitFor->P(); // Wait for EOF or a character to be available
+    } while (str[idx] != '\0'); // Continue until the null terminator is encountered
+
+    lock->Release(); // Release the lock after synchronization is done
 }
 
 //----------------------------------------------------------------------
