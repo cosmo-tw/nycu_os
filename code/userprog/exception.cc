@@ -125,6 +125,7 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Open:
 		{
+			cout<< "exception.cc is work" <<endl;
 			val = kernel->machine->ReadRegister(4);
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);

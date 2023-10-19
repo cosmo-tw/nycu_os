@@ -45,7 +45,8 @@ void SysPrintInt(int number)
 // Open a file with the name, and returns its corresponding OpenFileId. 
 // Return -1 if fail to open the file.
 OpenFileId SysOpen(char *name)
-{
+{	
+	cout<< "ksyscall.h is work" <<endl;
 	return kernel->fileSystem->OpenAFile(name);
 }
 

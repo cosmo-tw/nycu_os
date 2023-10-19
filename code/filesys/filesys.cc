@@ -340,6 +340,7 @@ FileSystem::Print()
 OpenFile
 FileSystem::OpenAFile(char *name)
 {
+    cout<< "filesys.cc is work" <<endl;
     int fileDescriptor = OpenForReadWrite(name, FALSE);
     return fileDescriptor;
 }
