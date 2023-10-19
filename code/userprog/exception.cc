@@ -153,6 +153,9 @@ ExceptionHandler(ExceptionType which)
 			int fileID  = kernel->machine->ReadRegister(6);
 			cout << "fileID = " << fileID << endl;
 
+			int RR  = kernel->machine->ReadRegister(7);
+			cout << "RR = " << RR << endl;
+
 			status = SysWrite(buffer, size, fileID);
 			cout << "status = " << status << endl;
 
