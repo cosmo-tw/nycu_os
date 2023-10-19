@@ -46,7 +46,7 @@ class Kernel {
 	
 	int CreateFile(char* filename); // fileSystem call
   void PrintInt(int number); // print
-  OpenFileId OpenAFile(char* name);
+  OpenFile OpenAFile(char* name);
 
 // These are public for notational convenience; really, 
 // they're global variables used everywhere.
