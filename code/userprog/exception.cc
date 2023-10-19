@@ -141,23 +141,36 @@ ExceptionHandler(ExceptionType which)
 		{
 			cout<< "SC_Write is work" <<endl;
 
+			/* 以下是針對fileIO_test1.c的結果 */
+
+			/* val = 812 */
 			val = kernel->machine->ReadRegister(4); 
 			cout << "val = " << val << endl;
 
-			char *buffer = &(kernel->machine->mainMemory[val]);
+			/* buffer = file1.test，也就是Create出來的檔案 */
+			/* 這裡很奇怪，如果引數是按順序放在Register中，那ReadRegister(4)出來的應該要是test + i的東西 */
+			/* 不應該可以做為主記憶體的位置查詢才對，那是id的事情(大概)，理應在Register(6)中取得 */
+			char *buffer = &(kernel->machine->mainMemory[val+1]);
 			cout << "buffer = " << buffer << endl;
 
+			/* size = 2021095029 */
+			/* 按順序這裡應該要提出 1 ，為Write的第2個引數 */
+			/* 用這個值去查找mainMemory是沒東西的*/
 			int size    = kernel->machine->ReadRegister(5);
-			char *size_c = &(kernel->machine->mainMemory[size]);
-			cout << "size_c = " << size_c << endl;
+			cout << "size = " << size << endl;
 
+			/* fileID = 121 */
+			/* 這裡本該出現 fileID，且值應該要是6(在Open的status結果是6)*/
+			/* 用這個值去查找mainMemory是沒東西的*/
 			int fileID  = kernel->machine->ReadRegister(6);
 			char *fileID_c = &(kernel->machine->mainMemory[fileID]);
 			cout << "fileID_c = " << fileID_c << endl;
 
+			/* RR = 122 */
+			/* 只是來看看第4個引數會出來甚麼東西 */
+			/* 用這個值去查找mainMemory會出現亂碼*/
 			int RR  = kernel->machine->ReadRegister(7);
-			char *RR_c = &(kernel->machine->mainMemory[RR]);
-			cout << "RR_c = " << RR_c << endl;
+			cout << "RR = " << RR << endl;
 
 			status = SysWrite(buffer, size, fileID);
 			cout << "status = " << status << endl;
