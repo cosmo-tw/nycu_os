@@ -1,3 +1,3 @@
 make clean
 make 
-../build.linux/nachos -e consoleIO_test2
+../build.linux/nachos -e halt
