@@ -163,6 +163,7 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Close:
 		{ 
+			cout<< "SC_Close is work" <<endl;
 			int fileID = kernel->machine->ReadRegister(4);
 			cout << "fileID = " << fileID << endl;
 
