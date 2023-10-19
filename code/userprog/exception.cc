@@ -130,6 +130,7 @@ ExceptionHandler(ExceptionType which)
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
 			kernel->machine->WriteRegister(2, (int) status);
+			cout<< "r2 =" << kernel->machine->ReadRegister(2)<<endl;
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
@@ -157,7 +158,7 @@ ExceptionHandler(ExceptionType which)
 			/* 按順序這裡應該要提出 1 ，為Write的第2個引數 */
 			/* 用這個值去查找mainMemory是沒東西的*/
 			/* 意外：ReadRegister(3)會讀出1*/
-			int size    = kernel->machine->ReadRegister(1);
+			int size    = kernel->machine->ReadRegister(5);
 			cout << "size = " << size << endl;
 
 			/* fileID = 121 */
