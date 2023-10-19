@@ -337,12 +337,4 @@ FileSystem::Print()
     delete directory;
 } 
 
-OpenFile
-FileSystem::OpenAFile(char *name)
-{
-    cout<< "filesys.cc is work" <<endl;
-    int fileDescriptor = OpenForReadWrite(name, FALSE);
-    return fileDescriptor;
-}
-
 #endif // FILESYS_STUB
