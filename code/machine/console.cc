@@ -225,15 +225,11 @@ ConsoleOutput::PrintInt(int number)
         num[i++] = temp % 10 + '0';
         temp = temp / 10;
     }
-    num[i] = '\0'; // Null-terminate the string
+    num[i++] = '\n'; // Append newline character
+    num[i] = '\0';   // Null-terminate the string
 
-    // Write each character followed by a newline character
-    for (int k = 0; k < i; k++)
-    {
-        WriteFile(writeFileNo, &num[k], 1); // Write one character
-        WriteFile(writeFileNo, "\n", 1);    // Write newline character
-    }
-
+    WriteFile(writeFileNo, num, i); // Write one character
+    
     // Free the allocated memory
     free(num);
 
