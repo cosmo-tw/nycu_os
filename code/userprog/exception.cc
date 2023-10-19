@@ -160,7 +160,7 @@ ExceptionHandler(ExceptionType which)
 			cout << "size = " << size << endl;
 
 			/* fileID = 121 */
-			/* 這裡本該出現 fileID，且值應該要是6(在Open的status結果是6)*/
+			/* 這裡本該出現 fileID，且值應該要是6(在Open的sta tus結果是6)*/
 			/* 用這個值去查找mainMemory是沒東西的*/
 			int fileID  = kernel->machine->ReadRegister(6);
 			cout << "fileID = " << fileID << endl;
