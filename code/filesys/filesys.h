@@ -86,7 +86,6 @@ class FileSystem {
 
     void Print();			// List all the files and their contents
 
-	/* These are new add for HW2-2 */
 	int OpenAFile(char *name)
 	{
 		cout<< "filesys.h is work" <<endl;
