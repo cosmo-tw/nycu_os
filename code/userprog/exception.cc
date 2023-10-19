@@ -148,11 +148,15 @@ ExceptionHandler(ExceptionType which)
 			cout << "buffer = " << buffer << endl;
 
 			int size    = kernel->machine->ReadRegister(5);
+			cout << "size = " << size << endl;
 
 			int fileID  = kernel->machine->ReadRegister(6);
 			cout << "fileID = " << fileID << endl;
 
 			status = SysWrite(buffer, size, fileID);
+			cout << "status = " << status << endl;
+
+
 			kernel->machine->WriteRegister(2, (int) status);
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
