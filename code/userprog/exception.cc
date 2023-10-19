@@ -136,18 +136,18 @@ ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
 		}
-		case SC_Write:
-		{
-			break;
-		}
-		case SC_Read:
-		{
-			break;
-		}
-		case SC_Close:
-		{
-			break;
-		}
+		// case SC_Write:
+		// {
+		// 	break;
+		// }
+		// case SC_Read:
+		// {
+		// 	break;
+		// }
+		// case SC_Close:
+		// {
+		// 	break;
+		// }
 
 		case SC_Exit:
 			DEBUG(dbgAddr, "Program exit\n");
