@@ -220,12 +220,12 @@ ConsoleOutput::PrintInt(int number)
         num[i++] = '-';
         temp = -temp;
     }
-    for (int j = count - 1; j >= 0; j--)
+    for (int i = count - 2; i >= 0; i--)
     {
-        num[i++] = temp % 10 + '0';
-        temp = temp / 10;
+        num[i] = number % 10 + '0';
+        number = number / 10;
     }
-    num[i] = '\0'; // Null-terminate the string
+    num[count - 1] = '\n'; // Null-terminate the string
 
     // Append newline character and write the string to the file
     num[i++] = '\n';
