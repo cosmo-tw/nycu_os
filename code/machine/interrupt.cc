@@ -365,15 +365,23 @@ Interrupt::PrintInt(int number)
     kernel->PrintInt(number);
 }
 
+/* 這段大致成形，但偵錯機制不確定可不可以正常運作 */
 int
 Interrupt::OpenAFile(char *name)
 {
-    cout<< "OpenAFile is work" <<endl;
     int fileDescriptor = OpenForReadWrite(name, FALSE);
+
+    /* 測試此函式有沒有被觸發，目前是有 */
+    cout<< "OpenAFile is work" <<endl;
     cout<< fileDescriptor <<endl;
-    return fileDescriptor;
+
+    if (fileDescriptor == NULL)
+        return -1;
+    else
+        return fileDescriptor;
 }
 
+/* 以下皆未成功 */
 int 
 Interrupt::WriteAFile(char *buffer, int size, int id)
 {

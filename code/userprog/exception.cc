@@ -125,7 +125,7 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Open:
 		{
-			cout<< "exception.cc is work" <<endl;
+			cout<< "SC_Open is work" <<endl;
 			val = kernel->machine->ReadRegister(4);
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
@@ -133,6 +133,43 @@ ExceptionHandler(ExceptionType which)
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+		}
+
+		case SC_Write:
+		{
+			cout<< "SC_Write is work" <<endl;
+
+			val = kernel->machine->ReadRegister(4); 
+			cout << "val = " << val << endl;
+
+			char *buffer = &(kernel->machine->mainMemory[val]);
+			cout << "buffer = " << buffer << endl;
+
+			int size    = kernel->machine->ReadRegister(5);
+
+			int fileID  = kernel->machine->ReadRegister(6);
+			cout << "fileID = " << fileID << endl;
+
+			status = SysWrite(buffer, size, fileID);
+			kernel->machine->WriteRegister(2, (int) status);
+
+			/* 每個功能結束後都要加的東西，還不確定啥意義 */
+			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+		}
+
+		case SC_Close:
+		{ 
+			int fileID = kernel->machine->ReadRegister(4);
+			cout << "fileID = " << fileID << endl;
+
+			status = SysClose(fileID); 
+			kernel->machine->WriteRegister(2, (int) status);
+				
+			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg)); 
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
 		}
