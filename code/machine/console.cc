@@ -183,57 +183,22 @@ ConsoleOutput::PrintInt(int number)
 {
      ASSERT(putBusy == FALSE);
 
-    char* num;
-    int count = 1;
-    int temp = number;
+    // Convert the number to a string
+    char num[10];  // Assuming the number has at most 10 digits
+    int count = snprintf(num, sizeof(num), "%d", number);
 
-    // Handle negative numbers
-    if (number < 0)
+    // Check for snprintf failure
+    if (count < 0 || count >= sizeof(num))
     {
-        temp = -number;
-        count++; // For negative sign
-    }
-
-    // Calculate the number of digits in the number
-    while (temp >= 10)
-    {
-        count++;
-        temp = temp / 10;
-    }
-
-    // Allocate memory for the character array
-    num = (char*)malloc((size_t)(count + 1) * sizeof(char)); // +1 for null terminator
-
-    // Check if memory allocation is successful
-    if (num == nullptr)
-    {
-        // Handle memory allocation failure
-        // For example, throw an exception or return an error code
+        // Handle error, for example, throw an exception or return an error code
         return;
     }
 
-    // Convert the number to a string
-    temp = number;
-    int i = 0;
-    if (number < 0)
-    {
-        num[i++] = '-';
-        temp = -temp;
-    }
-    for (int j = count - 1; j >= 0; j--)
-    {
-        num[j++] = temp % 10 + '0';
-        temp = temp / 10;
-    }
-    num[i] = '\0'; // Null-terminate the string
-
     // Append newline character and write the string to the file
-    num[i++] = '\n';
-    num[i] = '\0'; // Null-terminate the string again after appending newline
-    WriteFile(writeFileNo, num, i+1); // Write one character
-    
-    // Free the allocated memory
-    free(num);
+    num[count++] = '\n';
+    num[count] = '\0'; // Null-terminate the string
+
+    WriteFile(writeFileNo, num, count); // Write the entire string, including the null terminator
 
     // Set putBusy to TRUE and schedule the next operation
     putBusy = TRUE;
