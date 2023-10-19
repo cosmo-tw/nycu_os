@@ -60,21 +60,12 @@ SynchConsoleInput::GetChar()
 //----------------------------------------------------------------------
 
 void
-SynchConsoleOutput::PutInt(int value)
+SynchConsoleOutput::PutInt(int number)
 {
-    char str[15];
-    int idx = 0;
-    sprintf(str, "%d\n\0", value); // Convert integer to string and add a newline character at the end
-
-    lock->Acquire(); // Acquire a lock for synchronization
-
-    do {
-        consoleOutput->PutChar(str[idx]); // Put each character into consoleOutput using PutChar() function
-        idx++; // Move to the next character
-        waitFor->P(); // Wait for EOF or a character to be available
-    } while (str[idx] != '\0'); // Continue until the null terminator is encountered
-
-    lock->Release(); // Release the lock after synchronization is done
+   lock->Acquire();
+    consoleOutput->PrintInt(number);
+    waitFor->P();
+    lock->Release();
 }
 
 //----------------------------------------------------------------------
