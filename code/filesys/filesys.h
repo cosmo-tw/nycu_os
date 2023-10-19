@@ -87,7 +87,12 @@ class FileSystem {
     void Print();			// List all the files and their contents
 
 	/* These are new add for HW2-2 */
-	int OpenAFile(char *name);
+	int OpenAFile(char *name)
+	{
+		cout<< "filesys.h is work" <<endl;
+		int fileDescriptor = OpenForReadWrite(name, FALSE);
+		return fileDescriptor;
+	}
 	// int WriteAFile(char *buffer, int size, OpenFileId id);
 	// int ReadAFile(char *buffer, int size, OpenFileId id);
 	// int CloseAFile(OpenFile id);

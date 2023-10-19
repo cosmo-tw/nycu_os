@@ -338,11 +338,11 @@ FileSystem::Print()
 } 
 
 
-int FileSystem::OpenAFile(char *name)
-{
-    cout<< "filesys.h is work" <<endl;
-    int fileDescriptor = OpenForReadWrite(name, FALSE);
-    return fileDescriptor;
-}
+// int FileSystem::OpenAFile(char *name)
+// {
+//     cout<< "filesys.h is work" <<endl;
+//     int fileDescriptor = OpenForReadWrite(name, FALSE);
+//     return fileDescriptor;
+// }
 
 #endif // FILESYS_STUB
