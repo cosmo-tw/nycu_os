@@ -227,8 +227,12 @@ ConsoleOutput::PrintInt(int number)
     }
     num[i] = '\0'; // Null-terminate the string
 
-    // Write the string to the file
-    WriteFile(writeFileNo, num, i);
+    // Write each character followed by a newline character
+    for (int k = 0; k < i; k++)
+    {
+        WriteFile(writeFileNo, &num[k], 1); // Write one character
+        WriteFile(writeFileNo, "\n", 1);    // Write newline character
+    }
 
     // Free the allocated memory
     free(num);
