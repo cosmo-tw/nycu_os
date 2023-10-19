@@ -54,15 +54,14 @@ SynchConsoleInput::GetChar()
 }
 
 //----------------------------------------------------------------------
-// SynchConsoleInput::CallBack
-//      Interrupt handler called when keystroke is hit; wake up
-//	anyone waiting.
+// SynchConsoleInput::PutInt
+//     new add
 //----------------------------------------------------------------------
 
 void
 SynchConsoleOutput::PutInt(int number)
 {
-   lock->Acquire();
+    lock->Acquire();
     consoleOutput->PrintInt(number);
     waitFor->P();
     lock->Release();

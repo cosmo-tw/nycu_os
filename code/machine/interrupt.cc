@@ -359,3 +359,9 @@ Interrupt::DumpState()
     cout << "\nEnd of pending interrupts\n";
 }
 
+void
+Interrupt::PrintInt(int number)
+{
+    kernel->PrintInt(number);
+}
+

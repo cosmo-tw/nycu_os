@@ -35,9 +35,9 @@ int SysCreate(char *filename)
 }
 
 /* This is new add function for HW Part2-1 */
-void SysPrintInt(int val)
+void SysPrintInt(int number)
 {
-	kernel->synchConsoleOut->PutInt(val);
+	kernel->interrupt->PrintInt(number);
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */
