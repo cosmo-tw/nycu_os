@@ -147,10 +147,10 @@ ExceptionHandler(ExceptionType which)
 			val = kernel->machine->ReadRegister(4); 
 			cout << "val = " << val << endl;
 
-			/* buffer = file1.test，也就是Create出來的檔案 */
+			/* buffer = file1.test，也就是Create出來的檔案的名字 */
 			/* 這裡很奇怪，如果引數是按順序放在Register中，那ReadRegister(4)出來的應該要是test + i的東西 */
 			/* 不應該可以做為主記憶體的位置查詢才對，那是id的事情(大概)，理應在Register(6)中取得 */
-			char *buffer = &(kernel->machine->mainMemory[val+1]);
+			char *buffer = &(kernel->machine->mainMemory[val]);
 			cout << "buffer = " << buffer << endl;
 
 			/* size = 2021095029 */
@@ -163,8 +163,7 @@ ExceptionHandler(ExceptionType which)
 			/* 這裡本該出現 fileID，且值應該要是6(在Open的status結果是6)*/
 			/* 用這個值去查找mainMemory是沒東西的*/
 			int fileID  = kernel->machine->ReadRegister(6);
-			char *fileID_c = &(kernel->machine->mainMemory[fileID]);
-			cout << "fileID_c = " << fileID_c << endl;
+			cout << "fileID = " << fileID << endl;
 
 			/* RR = 122 */
 			/* 只是來看看第4個引數會出來甚麼東西 */
