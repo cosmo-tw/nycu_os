@@ -156,7 +156,7 @@ ExceptionHandler(ExceptionType which)
 			/* size = 2021095029 */
 			/* 按順序這裡應該要提出 1 ，為Write的第2個引數 */
 			/* 用這個值去查找mainMemory是沒東西的*/
-			int size    = kernel->machine->ReadRegister(5);
+			int size    = kernel->machine->ReadRegister(3);
 			cout << "size = " << size << endl;
 
 			/* fileID = 121 */
