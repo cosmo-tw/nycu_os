@@ -181,51 +181,59 @@ ConsoleOutput::PutChar(char ch)
 void
 ConsoleOutput::PrintInt(int number)
 {
-    ASSERT(putBusy == FALSE);
-    //int numASC = number + 48;
-    //char ch = (char) numASC;
+     ASSERT(putBusy == FALSE);
+
     char* num;
-	int count = 1;
-	int temp;
-	if(number)
-	{
-		temp = number;
-		while(temp >= 10)
-		{
-			count++;
-			temp= temp / 10; 
-		}
-		count++;
-		num = (char*)malloc((size_t)count*sizeof(char));
-		for(int i = 0; i<count+1; i++)
-			num[i] = 0;
-		for(int i = count-2; i>=0; i--)
-		{
-			num[i] = number % 10 + '0';
-			number = number / 10;
-		}
-		num[count-1]='\n';
-	}
-	else
-	{
-		temp = (-1)*number;
-		while(temp >= 10)
-		{
-			count++;
-			temp= temp / 10; 
-		}
-		count = count + 2;
-		num = (char*)malloc((size_t)count*sizeof(char));
-		number = number * (-1);
-		for(int i = count-2; i>=1; i--)
-		{
-			num[i] = number % 10 + '0';
-			number = number / 10;
-		}
-		num[0] = '-';
-		num[count-1]='\n';
-	}
-    WriteFile(writeFileNo, num, sizeof(num)/sizeof(char));
+    int count = 1;
+    int temp = number;
+
+    // Handle negative numbers
+    if (number < 0)
+    {
+        temp = -number;
+        count++; // For negative sign
+    }
+
+    // Calculate the number of digits in the number
+    while (temp >= 10)
+    {
+        count++;
+        temp = temp / 10;
+    }
+
+    // Allocate memory for the character array
+    num = (char*)malloc((size_t)(count + 1) * sizeof(char)); // +1 for null terminator
+
+    // Check if memory allocation is successful
+    if (num == nullptr)
+    {
+        // Handle memory allocation failure
+        // For example, throw an exception or return an error code
+        return;
+    }
+
+    // Convert the number to a string
+    temp = number;
+    int i = 0;
+    if (number < 0)
+    {
+        num[i++] = '-';
+        temp = -temp;
+    }
+    for (int j = count - 1; j >= 0; j--)
+    {
+        num[i++] = temp % 10 + '0';
+        temp = temp / 10;
+    }
+    num[i] = '\0'; // Null-terminate the string
+
+    // Write the string to the file
+    WriteFile(writeFileNo, num, i);
+
+    // Free the allocated memory
+    free(num);
+
+    // Set putBusy to TRUE and schedule the next operation
     putBusy = TRUE;
     kernel->interrupt->Schedule(this, ConsoleTime, ConsoleWriteInt);
 }
