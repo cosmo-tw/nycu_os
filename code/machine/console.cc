@@ -172,3 +172,63 @@ ConsoleOutput::PutChar(char ch)
     kernel->interrupt->Schedule(this, ConsoleTime, ConsoleWriteInt);
 }
 
+//----------------------------------------------------------------------
+// ConsoleOutput::PrintInt()
+// 	Write a character to the simulated display, schedule an interrupt 
+//	to occur in the future, and return.
+//----------------------------------------------------------------------
+
+void
+ConsoleOutput::PrintInt(int number)
+{
+    ASSERT(putBusy == FALSE);
+    //int numASC = number + 48;
+    //char ch = (char) numASC;
+    char* num;
+	int count = 1;
+	int temp;
+	if(number)
+	{
+		temp = number;
+		while(temp >= 10)
+		{
+			count++;
+			temp= temp / 10; 
+		}
+		count++;
+		num = (char*)malloc((size_t)count*sizeof(char));
+		for(int i = 0; i<count+1; i++)
+			num[i] = 0;
+		for(int i = count-2; i>=0; i--)
+		{
+			num[i] = number % 10 + '0';
+			number = number / 10;
+		}
+		num[count-1]='\n';
+	}
+	else
+	{
+		temp = (-1)*number;
+		while(temp >= 10)
+		{
+			count++;
+			temp= temp / 10; 
+		}
+		count = count + 2;
+		num = (char*)malloc((size_t)count*sizeof(char));
+		number = number * (-1);
+		for(int i = count-2; i>=1; i--)
+		{
+			num[i] = number % 10 + '0';
+			number = number / 10;
+		}
+		num[0] = '-';
+		num[count-1]='\n';
+	}
+    WriteFile(writeFileNo, num, sizeof(num)/sizeof(char));
+    putBusy = TRUE;
+    kernel->interrupt->Schedule(this, ConsoleTime, ConsoleWriteInt);
+}
+
+
+

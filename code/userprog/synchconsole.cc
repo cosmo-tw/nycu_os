@@ -59,7 +59,7 @@ SynchConsoleInput::GetChar()
 //----------------------------------------------------------------------
 
 void
-SynchConsoleOutput::PutInt(int number)
+SynchConsoleOutput::PrintInt(int number)
 {
     lock->Acquire();
     consoleOutput->PrintInt(number);
