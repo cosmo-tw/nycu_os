@@ -87,7 +87,7 @@ class FileSystem {
     void Print();			// List all the files and their contents
 
 	/* These are new add for HW2-2 */
-	OpenFile OpenAFile(char *name);
+	OpenFileId OpenAFile(char *name);
 	// int WriteAFile(char *buffer, int size, OpenFileId id);
 	// int ReadAFile(char *buffer, int size, OpenFileId id);
 	// int CloseAFile(OpenFile id);
