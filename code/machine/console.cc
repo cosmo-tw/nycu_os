@@ -202,7 +202,7 @@ ConsoleOutput::PrintInt(int number)
     }
 
     // Allocate memory for the character array
-    num = (char*)malloc((size_t)(count + 1) * sizeof(char)); // +1 for null terminator
+    num = (char*)malloc((size_t)(count + 2) * sizeof(char)); // +1 for null terminator
 
     // Check if memory allocation is successful
     if (num == nullptr)
@@ -225,8 +225,10 @@ ConsoleOutput::PrintInt(int number)
         num[i++] = temp % 10 + '0';
         temp = temp / 10;
     }
-    num[i++] = '\n'; // Append newline character
-    num[i] = '\0';   // Null-terminate the string
+    num[i] = '\0'; // Null-terminate the string
+
+    // Append newline character and write the string to the file
+    num[i++] = '\n';
 
     WriteFile(writeFileNo, num, i); // Write one character
     
