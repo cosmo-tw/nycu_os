@@ -229,7 +229,7 @@ ConsoleOutput::PrintInt(int number)
 
     // Append newline character and write the string to the file
     num[i++] = '\n';
-
+    num[i] = '\0'; // Null-terminate the string again after appending newline
     WriteFile(writeFileNo, num, i); // Write one character
     
     // Free the allocated memory
