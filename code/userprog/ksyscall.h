@@ -40,4 +40,28 @@ void SysPrintInt(int number)
 	kernel->interrupt->PrintInt(number);
 }
 
+/* This is new add function for HW Part2-2 */
+
+// Open a file with the name, and returns its corresponding OpenFileId. 
+// Return -1 if fail to open the file.
+OpenFileId SysOpen(char *name)
+{
+	return kernel->fileSystem->OpenAFile(name);
+}
+
+int SysWrite(char *buffer, int size, OpenFileId id)
+{
+	return kernel->fileSystem->WriteAFile(buffer, size, id);
+}
+
+int SysRead(char *buffer, int size, OpenFileId id)
+{
+  return kernel->fileSystem->ReadAFile(buffer, size, id);
+}
+
+int SysClose(OpenFileId id)
+{
+  return kernel->fileSystem->CloseAFile(id);
+}
+
 #endif /* ! __USERPROG_KSYSCALL_H__ */

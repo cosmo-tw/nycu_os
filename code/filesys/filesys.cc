@@ -337,4 +337,11 @@ FileSystem::Print()
     delete directory;
 } 
 
+OpenFile
+FileSystem::OpenAFile(char *name)
+{
+    int fileDescriptor = OpenForReadWrite(name, FALSE);
+    return fileDescriptor;
+}
+
 #endif // FILESYS_STUB

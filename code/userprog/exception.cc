@@ -122,15 +122,38 @@ ExceptionHandler(ExceptionType which)
 			return;	
 			ASSERTNOTREACHED();
             break;
+
+		case SC_Open:
+		{
+			val = kernel->machine->ReadRegister(4);
+			char *filename = &(kernel->machine->mainMemory[val]);
+			status = SysOpen(filename);
+			kernel->machine->WriteRegister(2, (int) status);
+
+			/* 每個功能結束後都要加的東西，還不確定啥意義 */
+			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+		}
+		case SC_Write:
+		{
+			break;
+		}
+		case SC_Read:
+		{
+			break;
+		}
+		case SC_Close:
+		{
+			break;
+		}
+
 		case SC_Exit:
 			DEBUG(dbgAddr, "Program exit\n");
             val=kernel->machine->ReadRegister(4);
             cout << "return value:" << val << endl;
 			kernel->currentThread->Finish();
             break;
-		
-
-		
 
       	default:
 			cerr << "Unexpected system call " << type << "\n";
