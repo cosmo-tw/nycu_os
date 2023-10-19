@@ -88,9 +88,9 @@ class FileSystem {
 
 	/* These are new add for HW2-2 */
 	OpenFile OpenAFile(char *name);
-	int WriteAFile(char *buffer, int size, OpenFileId id);
-	int ReadAFile(char *buffer, int size, OpenFileId id);
-	int CloseAFile(OpenFile id);
+	// int WriteAFile(char *buffer, int size, OpenFileId id);
+	// int ReadAFile(char *buffer, int size, OpenFileId id);
+	// int CloseAFile(OpenFile id);
 
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,
