@@ -368,15 +368,18 @@ Interrupt::PrintInt(int number)
 int
 Interrupt::OpenAFile(char *name)
 {
-    cout<< "filesys.h is work" <<endl;
+    cout<< "OpenAFile is work" <<endl;
     int fileDescriptor = OpenForReadWrite(name, FALSE);
+    cout<< fileDescriptor <<endl;
     return fileDescriptor;
 }
 
 int 
 Interrupt::WriteAFile(char *buffer, int size, int id)
 {
+    cout<< "OpenAFile is work" <<endl;
     WriteFile(id, buffer, size);
+    cout<< size <<endl;
     return size;
 }
 
@@ -389,5 +392,6 @@ Interrupt::WriteAFile(char *buffer, int size, int id)
 int
 Interrupt::CloseAFile(int id)
 {
+    cout<< "CloseAFile is work" <<endl;
     return Close(id);
 }
