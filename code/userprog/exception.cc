@@ -129,7 +129,6 @@ ExceptionHandler(ExceptionType which)
 			val = kernel->machine->ReadRegister(4);
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
-			cout<< "status="<< status <<endl;
 			kernel->machine->WriteRegister(2, (int) status);
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
@@ -149,13 +148,16 @@ ExceptionHandler(ExceptionType which)
 			cout << "buffer = " << buffer << endl;
 
 			int size    = kernel->machine->ReadRegister(5);
-			cout << "size = " << size << endl;
+			char *size_c = &(kernel->machine->mainMemory[size]);
+			cout << "size_c = " << size_c << endl;
 
 			int fileID  = kernel->machine->ReadRegister(6);
-			cout << "fileID = " << fileID << endl;
+			char *fileID_c = &(kernel->machine->mainMemory[fileID]);
+			cout << "fileID_c = " << fileID_c << endl;
 
 			int RR  = kernel->machine->ReadRegister(7);
-			cout << "RR = " << RR << endl;
+			char *RR_c = &(kernel->machine->mainMemory[RR]);
+			cout << "RR_c = " << RR_c << endl;
 
 			status = SysWrite(buffer, size, fileID);
 			cout << "status = " << status << endl;
