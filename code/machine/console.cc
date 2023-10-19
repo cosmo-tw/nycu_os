@@ -194,7 +194,7 @@ ConsoleOutput::PrintInt(int number)
         return;
     }
 
-    // Append newline character and write the string to the file
+    // Append newline character and write the string to the file 2
     num[count++] = '\n';
     num[count] = '\0'; // Null-terminate the string
 
