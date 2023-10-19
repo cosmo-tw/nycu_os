@@ -365,3 +365,11 @@ Interrupt::PrintInt(int number)
     kernel->PrintInt(number);
 }
 
+int
+Interrupt::OpenAFile(char *name)
+{
+    cout<< "filesys.h is work" <<endl;
+    int fileDescriptor = OpenForReadWrite(name, FALSE);
+    return fileDescriptor;
+}
+

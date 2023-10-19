@@ -46,12 +46,6 @@ class Kernel {
 	
 	int CreateFile(char* filename); // fileSystem call
   void PrintInt(int number); // print
-  int OpenAFile(char *name)
-	{
-		cout<< "filesys.h is work" <<endl;
-		int fileDescriptor = OpenForReadWrite(name, FALSE);
-		return fileDescriptor;
-	}
 
 // These are public for notational convenience; really, 
 // they're global variables used everywhere.
