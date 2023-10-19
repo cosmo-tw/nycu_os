@@ -202,7 +202,7 @@ ConsoleOutput::PrintInt(int number)
     }
 
     // Allocate memory for the character array
-    num = (char*)malloc((size_t)(count + 2) * sizeof(char)); // +1 for null terminator
+    num = (char*)malloc((size_t)(count + 1) * sizeof(char)); // +1 for null terminator
 
     // Check if memory allocation is successful
     if (num == nullptr)
@@ -222,7 +222,7 @@ ConsoleOutput::PrintInt(int number)
     }
     for (int j = count - 1; j >= 0; j--)
     {
-        num[i++] = temp % 10 + '0';
+        num[j++] = temp % 10 + '0';
         temp = temp / 10;
     }
     num[i] = '\0'; // Null-terminate the string
