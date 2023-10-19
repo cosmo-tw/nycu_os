@@ -127,10 +127,12 @@ ExceptionHandler(ExceptionType which)
 		{
 			cout<< "SC_Open is work" <<endl;
 			val = kernel->machine->ReadRegister(4);
+
+			cout<< "r4 =" << val << endl;
+
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
 			kernel->machine->WriteRegister(2, (int) status);
-			cout<< "r2 =" << kernel->machine->ReadRegister(2)<<endl;
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
