@@ -47,7 +47,7 @@ void SysPrintInt(int number)
 OpenFileId SysOpen(char *name)
 {	
 	cout<< "ksyscall.h is work" <<endl;
-	return kernel->fileSystem->OpenAFile(name);
+	return kernel->OpenAFile(name);
 }
 
 // int SysWrite(char *buffer, int size, OpenFileId id)
