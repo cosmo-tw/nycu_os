@@ -310,6 +310,6 @@ int Kernel::CreateFile(char *filename)
 
 void Kernel::PrintInt(int number)
 {
-	return synchConsoleOut->PutInt(number);
+	return synchConsoleOut->PrintInt(number);
 }
 
