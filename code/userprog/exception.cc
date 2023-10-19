@@ -126,9 +126,8 @@ ExceptionHandler(ExceptionType which)
 		case SC_Open:
 		{
 			cout<< "SC_Open is work" <<endl;
+			/* 在 fileIO_test1中，val = 812 */
 			val = kernel->machine->ReadRegister(4);
-
-			cout<< "r4 =" << val << endl;
 
 			char *filename = &(kernel->machine->mainMemory[val]);
 			status = SysOpen(filename);
@@ -138,6 +137,9 @@ ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+			return;
+			ASSERTNOTREACHED();
+            break;
 		}
 
 		case SC_Write:
@@ -185,6 +187,9 @@ ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+			return;
+			ASSERTNOTREACHED();
+            break;
 		}
 
 		case SC_Close:
@@ -199,6 +204,9 @@ ExceptionHandler(ExceptionType which)
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg)); 
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+			return;
+			ASSERTNOTREACHED();
+            break;
 		}
 
 		case SC_Exit:
