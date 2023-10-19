@@ -65,9 +65,8 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 		case SC_PrintInt:
-			val = kernel->machine->ReadRegister(4);
-			
-			SysPrintInt(val);
+		
+			SysPrintInt((int)kernel->machine->ReadRegister(4));
 			
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
