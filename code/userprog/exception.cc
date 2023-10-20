@@ -182,12 +182,12 @@ ExceptionHandler(ExceptionType which)
 		{ 
 			/* 一樣，file ID應跟 Open()的返還值一樣 */
 			int fileID = kernel->machine->ReadRegister(4);
-			cout << "close fileID = " << fileID << endl;
+			// cout << "close fileID = " << fileID << endl;
 
 			/* status會存 0(關檔失敗)或1(關檔成功) */
 			status = SysClose(fileID); 
 
-			cout<< "SysClose = " << status <<endl;
+			// cout<< "SysClose = " << status <<endl;
 			kernel->machine->WriteRegister(2, (int) status);
 				
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg)); 

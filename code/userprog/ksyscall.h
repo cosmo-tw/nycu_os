@@ -43,7 +43,6 @@ void SysPrintInt(int number)
 /* This is new add function for HW Part2-2 */
 OpenFileId SysOpen(char *name)
 {	
-	cout<< "ksyscall.h is work" <<endl;
 	return kernel->interrupt->OpenAFile(name);
 }
 

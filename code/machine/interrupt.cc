@@ -389,7 +389,6 @@ Interrupt::WriteAFile(char *buffer, int size, int id)
     else
     {
         WriteFile(id, buffer, size);
-        cout<< "size = " << size <<endl;
         return size;
     }
 }
