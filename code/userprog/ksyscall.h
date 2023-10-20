@@ -41,9 +41,6 @@ void SysPrintInt(int number)
 }
 
 /* This is new add function for HW Part2-2 */
-
-// Open a file with the name, and returns its corresponding OpenFileId. 
-// Return -1 if fail to open the file.
 OpenFileId SysOpen(char *name)
 {	
 	cout<< "ksyscall.h is work" <<endl;

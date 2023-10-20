@@ -86,16 +86,6 @@ class FileSystem {
 
     void Print();			// List all the files and their contents
 
-	// int OpenAFile(char *name)
-	// {
-	// 	cout<< "filesys.h is work" <<endl;
-	// 	int fileDescriptor = OpenForReadWrite(name, FALSE);
-	// 	return fileDescriptor;
-	// }
-	// int WriteAFile(char *buffer, int size, OpenFileId id);
-	// int ReadAFile(char *buffer, int size, OpenFileId id);
-	// int CloseAFile(OpenFile id);
-
   private:
    OpenFile* freeMapFile;		// Bit map of free disk blocks,
 					// represented as a file

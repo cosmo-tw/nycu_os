@@ -365,30 +365,33 @@ Interrupt::PrintInt(int number)
     kernel->PrintInt(number);
 }
 
-/* 這段大致成形，但偵錯機制不確定可不可以正常運作 */
+/* These are new add for HW2-2 */
 int
 Interrupt::OpenAFile(char *name)
 {
     int fileDescriptor = OpenForReadWrite(name, FALSE);
 
-    /* 測試此函式有沒有被觸發，目前是有 */
-    cout<< "OpenAFile is work" <<endl;
-    cout<< fileDescriptor <<endl;
+    cout<< "fileDescriptor = " << fileDescriptor <<endl;
 
-    if (fileDescriptor == NULL)
+    /* 偵錯機制(未確認可以成功) */
+    if (fileDescriptor < 0)
         return -1;
     else
         return fileDescriptor;
 }
 
-/* 以下皆未成功 */
 int 
 Interrupt::WriteAFile(char *buffer, int size, int id)
 {
-    cout<< "OpenAFile is work" <<endl;
-    WriteFile(id, buffer, size);
-    cout<< size <<endl;
-    return size;
+    /* 偵錯機制(未確認可以成功) */
+    if( id < 0 )
+        return -1;
+    else
+    {
+        WriteFile(id, buffer, size);
+        cout<< "size = " << size <<endl;
+        return size;
+    }
 }
 
 // int
@@ -400,6 +403,6 @@ Interrupt::WriteAFile(char *buffer, int size, int id)
 int
 Interrupt::CloseAFile(int id)
 {
-    cout<< "CloseAFile is work" <<endl;
+    /* 貌似這個會直接回傳 1或0 */
     return Close(id);
 }

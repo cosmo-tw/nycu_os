@@ -125,15 +125,20 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Open:
 		{
-			cout<< "SC_Open is work" <<endl;
-			/* 在 fileIO_test1中，val = 812 */
+			
+			/* r4~r7 是存放函式的引數(按順序)，現在 r4 存的是建立的檔案的名稱在主記憶體的位置 */
 			val = kernel->machine->ReadRegister(4);
-
 			char *filename = &(kernel->machine->mainMemory[val]);
+
+			/* status 存放的是 file 的ID */
 			status = SysOpen(filename);
+			cout<< "file ID = " << status << endl;
+
 			kernel->machine->WriteRegister(2, (int) status);
 
 			/* 每個功能結束後都要加的東西，還不確定啥意義 */
+			/* return可能跟釋放register有關，沒加的話會導致使用完這個syscall之後，用其他的syscall沒辦法正確傳遞引數 */
+			/* 會使其他syscall這裡提取 r4~r7 時還是會拿到上一個syscall的引數資料 */
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
@@ -144,46 +149,27 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Write:
 		{
-			cout<< "SC_Write is work" <<endl;
-
-			/* 以下是針對fileIO_test1.c的結果 */
-
-			/* val = 812 */
+			/* 這裡拿到的就是要寫入的內容在主記憶體上的位置 */
+			/* 指向要寫的內容的位置 */
 			val = kernel->machine->ReadRegister(4); 
 			cout << "val = " << val << endl;
 
-			/* buffer = file1.test，也就是Create出來的檔案的名字 */
-			/* 這裡很奇怪，如果引數是按順序放在Register中，那ReadRegister(4)出來的應該要是test + i的東西 */
-			/* 不應該可以做為主記憶體的位置查詢才對，那是id的事情(大概)，理應在Register(6)中取得 */
+			/* 這邊的buffer不太確定為什麼是存取a~z，下一次是b~z，而不是一個一個寫 */
 			char *buffer = &(kernel->machine->mainMemory[val]);
 			cout << "buffer = " << buffer << endl;
 
-			/* size = 2021095029 */
-			/* 按順序這裡應該要提出 1 ，為Write的第2個引數 */
-			/* 用這個值去查找mainMemory是沒東西的*/
-			/* 意外：ReadRegister(3)會讀出1*/
+			/* 要寫入的大小，這是用來對答案的，如果寫入的大小與輸入的大小對不上就會報錯 */
 			int size    = kernel->machine->ReadRegister(5);
-			cout << "size = " << size << endl;
 
-			/* fileID = 121 */
-			/* 這裡本該出現 fileID，且值應該要是6(在Open的sta tus結果是6)*/
-			/* 用這個值去查找mainMemory是沒東西的*/
+			/* file ID，理論上要跟 Open() 所返還的值是一樣的 */
 			int fileID  = kernel->machine->ReadRegister(6);
 			cout << "fileID = " << fileID << endl;
 
-			/* RR = 122 */
-			/* 只是來看看第4個引數會出來甚麼東西 */
-			/* 用這個值去查找mainMemory會出現亂碼*/
-			int RR  = kernel->machine->ReadRegister(7);
-			cout << "RR = " << RR << endl;
-
+			/* status存放實際上寫了多少個char，如果嘗試寫入非法的file理應返回-1 */
 			status = SysWrite(buffer, size, fileID);
 			cout << "status = " << status << endl;
-
-
 			kernel->machine->WriteRegister(2, (int) status);
 
-			/* 每個功能結束後都要加的東西，還不確定啥意義 */
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
@@ -194,10 +180,11 @@ ExceptionHandler(ExceptionType which)
 
 		case SC_Close:
 		{ 
-			cout<< "SC_Close is work" <<endl;
+			/* 一樣，file ID應跟 Open()的返還值一樣 */
 			int fileID = kernel->machine->ReadRegister(4);
-			cout << "fileID = " << fileID << endl;
+			cout << "close fileID = " << fileID << endl;
 
+			/* status會存 0(關檔失敗)或1(關檔成功) */
 			status = SysClose(fileID); 
 			kernel->machine->WriteRegister(2, (int) status);
 				
