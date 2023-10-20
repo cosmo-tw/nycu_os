@@ -407,8 +407,14 @@ Interrupt::ReadAFile(char *buffer, int size, int id)
 int
 Interrupt::CloseAFile(int id)
 {
+    if (id < 0)
+        return 0;
+
+    /* Close()如果沒關檔成功，返還的是小於0的值 */
+    int success = Close(id);
+
      /* 偵錯機制(未確認可以成功) */
-    if (id < 0 )
+    if (success < 0)
         return 0;
     else
         return Close(id);
