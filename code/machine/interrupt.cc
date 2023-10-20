@@ -371,8 +371,6 @@ Interrupt::OpenAFile(char *name)
 {
     int fileDescriptor = OpenForReadWrite(name, FALSE);
 
-    cout<< "fileDescriptor = " << fileDescriptor <<endl;
-
     /* 偵錯機制(未確認可以成功) */
     if (fileDescriptor < 0)
         return -1;
