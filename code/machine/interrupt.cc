@@ -417,5 +417,5 @@ Interrupt::CloseAFile(int id)
     if (success < 0)
         return 0;
     else
-        return Close(id);
+        return 1;
 }
