@@ -391,11 +391,18 @@ Interrupt::WriteAFile(char *buffer, int size, int id)
     }
 }
 
-// int
-// Interrupt::ReadAFile(char *buffer, int size, int id)
-// {
-//     return kernel->ReadFile(buffer, size, id);
-// }
+int
+Interrupt::ReadAFile(char *buffer, int size, int id)
+{
+    /* 偵錯機制(未確認可以成功) */
+    if( id < 0 )
+        return -1;
+    else
+    {
+        Read(id, buffer, size);
+        return size;
+    }
+}
 
 int
 Interrupt::CloseAFile(int id)

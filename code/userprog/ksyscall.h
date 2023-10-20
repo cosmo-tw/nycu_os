@@ -51,10 +51,10 @@ int SysWrite(char *buffer, int size, OpenFileId id)
 	return kernel->interrupt->WriteAFile(buffer, size, id);
 }
 
-// int SysRead(char *buffer, int size, OpenFileId id)
-// {
-//   return kernel->interrupt->ReadAFile(buffer, size, id);
-// }
+int SysRead(char *buffer, int size, OpenFileId id)
+{
+  return kernel->interrupt->ReadAFile(buffer, size, id);
+}
 
 int SysClose(OpenFileId id)
 {

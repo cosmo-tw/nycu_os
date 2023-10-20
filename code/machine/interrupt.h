@@ -100,7 +100,7 @@ class Interrupt {
 
     int OpenAFile(char *name);
     int WriteAFile(char *buffer, int size, int id);
-    // int ReadAFile(char *buffer, int size, int id);
+    int ReadAFile(char *buffer, int size, int id);
 	  int CloseAFile(int id);
  
     void YieldOnReturn();	// cause a context switch on return 

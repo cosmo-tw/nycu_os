@@ -178,6 +178,37 @@ ExceptionHandler(ExceptionType which)
             break;
 		}
 
+		case SC_Read:
+		{
+			/* 這裡拿到的就是要寫入的內容在主記憶體上的位置 */
+			/* 指向要讀的內容的位置 */
+			val = kernel->machine->ReadRegister(4); 
+			// cout << "val = " << val << endl;
+
+			/* 這邊的buffer不太確定為什麼是存取a~z，下一次是b~z，而不是一個一個寫 */
+			char *buffer = &(kernel->machine->mainMemory[val]);
+			// cout << "buffer = " << buffer << endl;
+
+			/* 要寫入的大小，這是用來對答案的，如果讀取的大小與輸入的大小對不上就會報錯 */
+			int size    = kernel->machine->ReadRegister(5);
+
+			/* file ID，理論上要跟 Open() 所返還的值是一樣的 */
+			int fileID  = kernel->machine->ReadRegister(6);
+			// cout << "fileID = " << fileID << endl;
+
+			/* status存放實際上讀了多少個char，如果嘗試讀取非法的file理應返回-1 */
+			status = SysRead(buffer, size, fileID);
+			// cout << "status = " << status << endl;
+			kernel->machine->WriteRegister(2, (int) status);
+
+			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
+			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
+			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
+			return;
+			ASSERTNOTREACHED();
+            break;
+		}
+
 		case SC_Close:
 		{ 
 			/* 一樣，file ID應跟 Open()的返還值一樣 */
