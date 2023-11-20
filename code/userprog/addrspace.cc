@@ -64,6 +64,7 @@ SwapHeader (NoffHeader *noffH)
 //	memory.  For now, this is really simple (1:1), since we are
 //	only uniprogramming, and we have a single unsegmented page table
 //----------------------------------------------------------------------
+bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 
 AddrSpace::AddrSpace()
 {
@@ -88,6 +89,8 @@ AddrSpace::AddrSpace()
 
 AddrSpace::~AddrSpace()
 {
+    for(int i = 0; i < numPages; i++)
+        AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
    delete pageTable;
 }
 
