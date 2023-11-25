@@ -131,3 +131,22 @@ SynchConsoleOutput::CallBack()
 {
     waitFor->V();
 }
+
+void
+SynchConsoleOutput::PutInt(int value)
+{
+    char str[15];
+    int idx=0;
+    sprintf(str, "%d\0", value);
+    lock->Acquire();
+    while (str[idx] != '\0') {
+    consoleOutput->PutChar(str[idx]);
+    idx++;
+    waitFor->P();
+    kernel->stats->numConsoleCharsWritten--; 
+    }
+    consoleOutput->PutChar('\n');
+    waitFor->P();
+    lock->Release();
+}
+
