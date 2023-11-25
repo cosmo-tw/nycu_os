@@ -53,19 +53,6 @@ SynchConsoleInput::GetChar()
     return ch;
 }
 
-//----------------------------------------------------------------------
-// SynchConsoleInput::PutInt
-//     new add
-//----------------------------------------------------------------------
-
-void
-SynchConsoleOutput::PrintInt(int number)
-{
-    lock->Acquire();
-    consoleOutput->PrintInt(number);
-    waitFor->P();
-    lock->Release();
-}
 
 //----------------------------------------------------------------------
 // SynchConsoleInput::CallBack
