@@ -65,15 +65,13 @@ ExceptionHandler(ExceptionType which)
 			ASSERTNOTREACHED();
 			break;
 		case SC_PrintInt:
-		
-			SysPrintInt((int)kernel->machine->ReadRegister(4));
-			
+			val = kernel->machine->ReadRegister(4);
+			SysPrintInt(val);
 			kernel->machine->WriteRegister(PrevPCReg, kernel->machine->ReadRegister(PCReg));
 			kernel->machine->WriteRegister(PCReg, kernel->machine->ReadRegister(PCReg) + 4);
 			kernel->machine->WriteRegister(NextPCReg, kernel->machine->ReadRegister(PCReg)+4);
 			return;
-			ASSERTNOTREACHED();
-            break;
+
 		case SC_MSG:
 			DEBUG(dbgSys, "Message received.\n");
 			val = kernel->machine->ReadRegister(4);

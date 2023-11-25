@@ -362,8 +362,7 @@ Interrupt::DumpState()
 void
 Interrupt::PrintInt(int number)
 {
-    kernel->synchConsoleOut->PutInt(number);
-
+    kernel->PrintInt(number);
 }
 
 /* These are new add for HW2-2 */
