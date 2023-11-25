@@ -21,6 +21,9 @@
 #include "machine.h"
 #include "noff.h"
 
+bool AddrSpace::usedPhysPage[NumPhysPages];
+int AddrSpace::usedPhysPageNum=0;
+
 //----------------------------------------------------------------------
 // SwapHeader
 // 	Do little endian to big endian conversion on the bytes in the 
@@ -64,10 +67,10 @@ SwapHeader (NoffHeader *noffH)
 //	memory.  For now, this is really simple (1:1), since we are
 //	only uniprogramming, and we have a single unsegmented page table
 //----------------------------------------------------------------------
-bool AddrSpace::usedPhyPage[NumPhysPages] = {0};
 
 AddrSpace::AddrSpace()
 {
+    /*
     pageTable = new TranslationEntry[NumPhysPages];
     for (int i = 0; i < NumPhysPages; i++) {
 	pageTable[i].virtualPage = i;	// for now, virt page # = phys page #
@@ -80,6 +83,7 @@ AddrSpace::AddrSpace()
     
     // zero out the entire address space
     bzero(kernel->machine->mainMemory, MemorySize);
+    */
 }
 
 //----------------------------------------------------------------------
@@ -89,9 +93,9 @@ AddrSpace::AddrSpace()
 
 AddrSpace::~AddrSpace()
 {
-    for(int i = 0; i < numPages; i++)
-        AddrSpace::usedPhyPage[pageTable[i].physicalPage] = false;
-   delete pageTable;
+    for(unsigned int i = 0; i < numPages; i++)usedPhysPage[pageTable[i].physicalPage]=FALSE;
+    usedPhysPageNum-=numPages;
+    delete pageTable;
 }
 
 
@@ -136,26 +140,28 @@ AddrSpace::Load(char *fileName)
 						// to leave room for the stack
 #endif
     numPages = divRoundUp(size, PageSize);
-    ////////////////////////////////////////////////////////////////
-        pageTable = new TranslationEntry[numPages];
-    for(unsigned int i = 0, j = 0; i < numPages; i++) {
-        pageTable[i].virtualPage = i;
-        while(j < NumPhysPages && AddrSpace::usedPhyPage[j] == true)
-            j++;
-        AddrSpace::usedPhyPage[j] = true;
-        pageTable[i].physicalPage = j;
-        pageTable[i].valid = true;
-        pageTable[i].use = false;
-        pageTable[i].dirty = false;
-        pageTable[i].readOnly = false;
-    }
-    ///////////////////////////////////////////////////////////////
+    
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
+    ASSERT(usedPhysPageNum + numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
+    ////////////////////////////////////////////////////////////////
+    pageTable = new TranslationEntry[NumPhysPages];
+    for (int i = 0, j = 0; i < NumPhysPages; i++) {
+        pageTable[i].virtualPage = i;	// for now, virt page # = phys page #
+        while(usedPhysPage[j++]){} //If usedPhysPage[j++] is True
+        // It's means this page is occupy by other threads
+        // so j++ to find next page
+        usedPhysPage[j-1] = TRUE; //turn it to occupy
+        pageTable[i].physicalPage = j-1;
+        pageTable[i].valid = TRUE;
+        pageTable[i].use = FALSE;
+        pageTable[i].dirty = FALSE;
+        pageTable[i].readOnly = FALSE; 
+    }
+    ///////////////////////////////////////////////////////////////
 
     DEBUG(dbgAddr, "Initializing address space: " << numPages << ", " << size);
 

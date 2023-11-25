@@ -39,7 +39,9 @@ class AddrSpace {
     // is 0 for Read, 1 for Write.
     ExceptionType Translate(unsigned int vaddr, unsigned int *paddr, int mode);
 
-    static bool usedPhyPage[NumPhysPages];
+    static bool usedPhysPage[NumPhysPages]; // record which page has used
+
+    static int usedPhysPageNum; //record the total page has used
 
 
   private:
