@@ -149,18 +149,20 @@ AddrSpace::Load(char *fileName)
 						// virtual memory
     usedPhysPageNum+=numPages;
     ////////////////////////////////////////////////////////////////
-    pageTable = new TranslationEntry[NumPhysPages];
-    for (int i = 0, j = 0; i < NumPhysPages; i++) {
-        pageTable[i].virtualPage = i;	// for now, virt page # = phys page #
-        while(usedPhysPage[j++]){} //If usedPhysPage[j++] is True
-        // It's means this page is occupy by other threads
-        // so j++ to find next page
-        usedPhysPage[j-1] = TRUE; //turn it to occupy
-        pageTable[i].physicalPage = j-1;
-        pageTable[i].valid = TRUE;
-        pageTable[i].use = FALSE;
-        pageTable[i].dirty = FALSE;
-        pageTable[i].readOnly = FALSE; 
+    pageTable = new TranslationEntry[numPages]; // create an enthough big pagetable
+    for (unsigned int i = 0, j = 0; i < numPages; i++)
+    {
+    pageTable[i].virtualPage = i; // for now, virt page # = phys page #
+
+    while(usedPhysPage[j++]){} //If usedPhysPage[j++] is True
+    // It's means this page is occupy by other threads
+    // so j++ to find next page
+    usedPhysPage[j-1]=TRUE; //turn it to occupy
+    pageTable[i].physicalPage = j-1;// pageTable[i].physicalPage = i;
+    pageTable[i].valid = TRUE;
+    pageTable[i].use = FALSE;
+    pageTable[i].dirty = FALSE;
+    pageTable[i].readOnly = FALSE;
     }
     ///////////////////////////////////////////////////////////////
 
@@ -182,6 +184,8 @@ AddrSpace::Load(char *fileName)
         &(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage*PageSize+(noffH.initData.virtualAddr%PageSize)]),
         noffH.initData.size, noffH.initData.inFileAddr);
     }
+    delete executable; // close file
+    return TRUE; // success
 
 #ifdef RDATA
     if (noffH.readonlyData.size > 0) {
