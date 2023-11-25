@@ -93,8 +93,9 @@ AddrSpace::AddrSpace()
 
 AddrSpace::~AddrSpace()
 {
-    for(unsigned int i = 0; i < numPages; i++)usedPhysPage[pageTable[i].physicalPage]=FALSE;
-    usedPhysPageNum-=numPages;
+    for(unsigned int i = 0; i < numPages; i++) 
+    usedPhysPage[pageTable[i].physicalPage] = FALSE;
+    usedPhysPageNum -= numPages;
     delete pageTable;
 }
 
@@ -142,7 +143,6 @@ AddrSpace::Load(char *fileName)
     numPages = divRoundUp(size, PageSize);
     
     size = numPages * PageSize;
-
     ASSERT(usedPhysPageNum + numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
@@ -171,16 +171,14 @@ AddrSpace::Load(char *fileName)
         DEBUG(dbgAddr, "Initializing code segment.");
 	DEBUG(dbgAddr, noffH.code.virtualAddr << ", " << noffH.code.size);
         executable->ReadAt(
-        &(kernel->machine->mainMemory[pageTable[noffH.code.virtualAddr/PageSize].physicalPage
-        * PageSize + (noffH.code.virtualAddr%PageSize)]),
+        &(kernel->machine->mainMemory[pageTable[noffH.code.virtualAddr/PageSize].physicalPage*PageSize+(noffH.code.virtualAddr%PageSize)]),
         noffH.code.size, noffH.code.inFileAddr);
     }
     if (noffH.initData.size > 0) {
         DEBUG(dbgAddr, "Initializing data segment.");
 	DEBUG(dbgAddr, noffH.initData.virtualAddr << ", " << noffH.initData.size);
-        executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage 
-        * PageSize + (noffH.code.virtualAddr%PageSize)]),
+		executable->ReadAt(
+        &(kernel->machine->mainMemory[pageTable[noffH.initData.virtualAddr/PageSize].physicalPage*PageSize+(noffH.initData.virtualAddr%PageSize)]),
         noffH.initData.size, noffH.initData.inFileAddr);
     }
 
@@ -188,10 +186,10 @@ AddrSpace::Load(char *fileName)
     if (noffH.readonlyData.size > 0) {
         DEBUG(dbgAddr, "Initializing read only data segment.");
 	DEBUG(dbgAddr, noffH.readonlyData.virtualAddr << ", " << noffH.readonlyData.size);
-        executable->ReadAt(
-		&(kernel->machine->mainMemory[pageTable[noffH.readonlyData.virtualAddr/PageSize].physicalPage 
-        * PageSize + (noffH.code.virtualAddr%PageSize)]), 
-        noffH.readonlyData.size, noffH.readonlyData.inFileAddr);
+		executable->ReadAt(
+		&(kernel->machine->mainMemory[noffH.readonlyData.virtualAddr]),
+			noffH.readonlyData.size, noffH.readonlyData.inFileAddr);
+
     }
 #endif
 
