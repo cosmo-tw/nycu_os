@@ -147,6 +147,7 @@ AddrSpace::Load(char *fileName)
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
+    usedPhysPageNum+=numPages;
     ////////////////////////////////////////////////////////////////
     pageTable = new TranslationEntry[NumPhysPages];
     for (int i = 0, j = 0; i < NumPhysPages; i++) {
