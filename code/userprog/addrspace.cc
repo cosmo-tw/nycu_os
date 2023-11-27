@@ -147,22 +147,26 @@ AddrSpace::Load(char *fileName)
 						// to run anything too big --
 						// at least until we have
 						// virtual memory
-    usedPhysPageNum+=numPages;
+    //usedPhysPageNum+=numPages;
     ////////////////////////////////////////////////////////////////
-    pageTable = new TranslationEntry[numPages]; // create an enthough big pagetable
-    for (unsigned int i = 0, j = 0; i < numPages; i++)
-    {
-    pageTable[i].virtualPage = i; // for now, virt page # = phys page #
+    pageTable = new TranslationEntry[numPages]; // Create a page table with enough entries
 
-    while(usedPhysPage[j++]){} //If usedPhysPage[j++] is True
-    // It's means this page is occupy by other threads
-    // so j++ to find next page
-    usedPhysPage[j-1]=TRUE; //turn it to occupy
-    pageTable[i].physicalPage = j-1;// pageTable[i].physicalPage = i;
-    pageTable[i].valid = TRUE;
-    pageTable[i].use = FALSE;
-    pageTable[i].dirty = FALSE;
-    pageTable[i].readOnly = FALSE;
+    for (unsigned int i = 0, j = 0; i < numPages; i++) {
+        pageTable[i].virtualPage = i; // Set virtual page number to match physical page number for now
+
+        // Find an available physical page not already occupied by other threads
+        while (usedPhysPage[j++]) {
+            // If usedPhysPage[j++] is True, it means this page is occupied by other threads,
+            // so we continue searching for the next available page
+        }
+        usedPhysPage[j - 1] = TRUE; // Mark the found physical page as occupied
+        pageTable[i].physicalPage = j - 1; // Assign the found physical page to the current virtual page
+
+        // Set page table entry flags
+        pageTable[i].valid = TRUE;
+        pageTable[i].use = FALSE;
+        pageTable[i].dirty = FALSE;
+        pageTable[i].readOnly = FALSE;
     }
     ///////////////////////////////////////////////////////////////
 
