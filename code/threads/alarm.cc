@@ -49,7 +49,7 @@ Alarm::CallBack()
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
     
-    if (status != IdleMode) {
-	interrupt->YieldOnReturn();
-    }
+    //if (status != IdleMode) {
+	//interrupt->YieldOnReturn();
+    //}
 }
