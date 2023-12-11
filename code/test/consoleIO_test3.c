@@ -4,9 +4,10 @@ int
 main()
 {
 	int n;
-	for (n=0;n<4;n++) {
-		PrintInt(1);
-	}
+	for (n=0;n<=12;n++){
+        
+		PrintInt(3);
+        }
         // Halt();
 	return 0;
 }
