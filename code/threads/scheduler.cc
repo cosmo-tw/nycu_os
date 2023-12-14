@@ -31,8 +31,8 @@
 static int
 pqSchedulingCompare (Thread *x, Thread *y)
 {
-    if (x->priority < y->priority) { return 1; }
-    else if (x->priority > y->priority) { return -1; }
+    if (x->getpriority() < y->getpriority()) { return 1; }
+    else if (x->getpriority() > y->getpriority()) { return -1; }
     else { return 0; }
 }
 
