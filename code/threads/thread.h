@@ -83,7 +83,7 @@ class Thread {
   public:
     Thread(char* debugName, int threadID);		// initialize a Thread 
     Thread(char* debugName, int threadID, int _priority);
-    int priority;
+    
     int getpriority(){return priority;}
     ~Thread(); 				// deallocate a Thread
 					// NOTE -- thread being deleted
@@ -112,7 +112,7 @@ class Thread {
 
   private:
     // some of the private data for this class is listed above
-    
+    int priority;
     int *stack; 	 	// Bottom of the stack 
 				// NULL if this is the main thread
 				// (If NULL, don't deallocate stack)
