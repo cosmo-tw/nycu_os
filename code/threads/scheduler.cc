@@ -134,7 +134,7 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     kernel->currentThread = nextThread;  // switch to the next thread
     nextThread->setStatus(RUNNING);      // nextThread is now running
     
-    DEBUG(dbgThread, "Switching from: " << oldThread->getName() << " to: " << nextThread->getName());
+    DEBUG(dbgThread, "Switching from : " << oldThread->getName() << " to: " << nextThread->getName());
     
     // This is a machine-dependent assembly language routine defined 
     // in switch.s.  You may have to think
