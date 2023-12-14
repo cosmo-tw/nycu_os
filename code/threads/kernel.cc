@@ -266,16 +266,17 @@ void ForkExecute(Thread *t)
 void Kernel::ExecAll()
 {
 	for (int i=1;i<=execfileNum;i++) {
-		int a = Exec(execfile[i]);
+		int a = Exec(execfile[i], threadProirity[i]);
 	}
 	currentThread->Finish();
     //Kernel::Exec();	
 }
 
 
-int Kernel::Exec(char* name)
+//int Kernel::Exec(char* name)
+int Kernel::Exec(char* name, int InitPriority)
 {
-	t[threadNum] = new Thread(name, threadNum);
+	t[threadNum] = new Thread(name, threadNum, InitPriority);
 	t[threadNum]->space = new AddrSpace();
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
 	threadNum++;
