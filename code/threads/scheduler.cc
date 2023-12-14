@@ -86,10 +86,10 @@ Scheduler::FindNextToRun ()
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
-    if (readyList->IsEmpty()) {
+    if (pqList->IsEmpty()) {
 		return NULL;
     } else {
-    	return readyList->RemoveFront();
+    	return pqList->RemoveFront();
     }
 }
 
