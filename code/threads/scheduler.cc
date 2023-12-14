@@ -158,9 +158,9 @@ Scheduler::Run (Thread *nextThread, bool finishing)
                  kernel->stats->totalTicks - kernel->stats->prevTicks << 
                  "] ticks");
     //cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
-    //SWITCH(oldThread, nextThread);
-    kernel->stats->prevTicks = kernel->stats->totalTicks;
     SWITCH(oldThread, nextThread);
+    kernel->stats->prevTicks = kernel->stats->totalTicks;
+    //SWITCH(oldThread, nextThread);
 
     // we're back, running oldThread
       
