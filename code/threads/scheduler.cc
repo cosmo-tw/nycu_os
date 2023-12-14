@@ -28,12 +28,13 @@
 // 	Initialize the list of ready but not running threads.
 //	Initially, no ready threads.
 //----------------------------------------------------------------------
-int
-pqSchedulingCompare (Thread *x, Thread *y)
+int pqSchedulingCompare (Thread *x, Thread *y)
 {
-    if (x->getpriority() < y->getpriority()) { return -1; }
-    else { return 0; }
+    if (x->getpriority() < y->getpriority()) { return 1; } // x has higher priority
+    else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
+    else { return 0; } // priorities are equal
 }
+
 
 Scheduler::Scheduler()
 { 
