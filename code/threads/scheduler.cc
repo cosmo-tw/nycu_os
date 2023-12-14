@@ -63,7 +63,7 @@ Scheduler::~Scheduler()
 //----------------------------------------------------------------------
 
 void
-Scheduler::ReadyToRun (Thread *thread)
+Scheduler::ReadyToRun (Thread* thread, int Priority)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
@@ -71,6 +71,8 @@ Scheduler::ReadyToRun (Thread *thread)
     thread->setStatus(READY);
     //readyList->Append(thread);
     pqList->Insert(thread);
+    cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl; 
+
 }
 
 //----------------------------------------------------------------------
