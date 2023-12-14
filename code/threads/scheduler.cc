@@ -94,11 +94,7 @@ Scheduler::FindNextToRun ()
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
-    if (pqList->IsEmpty()) {
-		return NULL;
-    } else {
-    	return pqList->RemoveFront();
-    }
+
     if (pqList->IsEmpty()) {
         return NULL;
     } else {
@@ -161,8 +157,8 @@ Scheduler::Run (Thread *nextThread, bool finishing)
                  "] is replaced, and it has executed [" << 
                  kernel->stats->totalTicks - kernel->stats->prevTicks << 
                  "] ticks");
-    cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
-    SWITCH(oldThread, nextThread);
+    //cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
+    //SWITCH(oldThread, nextThread);
     kernel->stats->prevTicks = kernel->stats->totalTicks;
     SWITCH(oldThread, nextThread);
 
