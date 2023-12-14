@@ -71,7 +71,13 @@ Scheduler::ReadyToRun (Thread* thread)
     thread->setStatus(READY);
     //readyList->Append(thread);
     pqList->Insert(thread);
-    // cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl; 
+    // cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl;
+     if( !pqList->IsInList(thread) )
+{
+        DEBUG(dbtwo, "[A] Tick ["<< kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted into queue")
+        pqList->Insert(thread);
+}
+
 
 }
 
@@ -93,6 +99,13 @@ Scheduler::FindNextToRun ()
     } else {
     	return pqList->RemoveFront();
     }
+    if (pqList->IsEmpty()) {
+        return NULL;
+    } else {
+        DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << "]:Thread [" << pqList ->RemoveFront()->getID() << "] is removeed from queue");
+        return pqList ->RemoveFront();
+    }
+
 }
 
 //----------------------------------------------------------------------
@@ -141,7 +154,16 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
-
+    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
+                 "]:Thread [" << nextThread->getID() << 
+                 "] now selected for execution, thread [" <<
+                 oldThread->getID() << 
+                 "] is replaced, and it has executed [" << 
+                 kernel->stats->totalTicks - kernel->stats->prevTicks << 
+                 "] ticks");
+    cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
+    SWITCH(oldThread, nextThread);
+    kernel->stats->prevTicks = kernel->stats->totalTicks;
     SWITCH(oldThread, nextThread);
 
     // we're back, running oldThread
@@ -159,6 +181,7 @@ Scheduler::Run (Thread *nextThread, bool finishing)
         oldThread->RestoreUserState();     // to restore, do it.
 	oldThread->space->RestoreState();
     }
+
 }
 
 //----------------------------------------------------------------------

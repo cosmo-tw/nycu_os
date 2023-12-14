@@ -22,6 +22,7 @@
 class Statistics {
   public:
     int totalTicks;      	// Total time running Nachos
+    int prevTicks;
     int idleTicks;       	// Time spent idle (no threads to run)
     int systemTicks;	 	// Time spent executing system code
     int userTicks;       	// Time spent executing user code
