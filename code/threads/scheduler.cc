@@ -63,7 +63,7 @@ Scheduler::~Scheduler()
 //----------------------------------------------------------------------
 
 void
-Scheduler::ReadyToRun (Thread* thread, int Priority)
+Scheduler::ReadyToRun (Thread* thread)
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
