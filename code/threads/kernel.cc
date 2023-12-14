@@ -47,6 +47,7 @@ Kernel::Kernel(int argc, char **argv)
             debugUserProg = TRUE;
 		} else if (strcmp(argv[i], "-e") == 0) {
         	execfile[++execfileNum]= argv[++i];
+            threadProirity[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
 		} else if (strcmp(argv[i], "-ep") == 0) {
             execfile[++execfileNum]= argv[++i];
