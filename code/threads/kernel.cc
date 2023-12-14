@@ -48,7 +48,7 @@ Kernel::Kernel(int argc, char **argv)
 		} else if (strcmp(argv[i], "-e") == 0) {
         	execfile[++execfileNum]= argv[++i];
 			cout << execfile[execfileNum] << "\n";
-		} else if (strcmp(argv[i], "-e") == 0) {
+		} else if (strcmp(argv[i], "-ep") == 0) {
             execfile[++execfileNum]= argv[++i];
             threadProirity[execfileNum] = atoi(argv[++i]);
             cout << execfile[execfileNum] <<" with proirity "<< threadProirity[execfileNum]<< "\n";
