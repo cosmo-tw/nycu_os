@@ -250,7 +250,7 @@ void SortedList<T>::Insert(T item)
         this->first = element;
         this->last = element;
     }
-    else if (compare(item, this->first->item) > 0)
+    else if (compare(item, this->first->item) < 0)
     { // item goes at front
         element->next = this->first;
         this->first = element;
@@ -259,7 +259,7 @@ void SortedList<T>::Insert(T item)
     { // look for first elt in list bigger than item
         for (ptr = this->first; ptr->next != NULL; ptr = ptr->next)
         {
-            if (compare(item, ptr->next->item) > 0)
+            if (compare(item, ptr->next->item) < 0)
             {
                 element->next = ptr->next;
                 ptr->next = element;
