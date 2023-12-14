@@ -276,13 +276,15 @@ void Kernel::ExecAll()
 
 //int Kernel::Exec(char* name)
 int Kernel::Exec(char* name, int InitPriority)
+
 {
+    threadNum++;
 	t[threadNum] = new Thread(name, threadNum, InitPriority);
 	t[threadNum]->space = new AddrSpace();
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
-	threadNum++;
+	
 
-	return threadNum-1;
+	return threadNum;
 /*
     cout << "Total threads number is " << execfileNum << endl;
     for (int n=1;n<=execfileNum;n++) {
