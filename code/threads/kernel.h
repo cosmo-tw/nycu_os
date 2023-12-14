@@ -69,6 +69,8 @@ class Kernel {
 
 	Thread* t[10];
 	char*   execfile[10];
+  int threadProirity[10]; // new added
+
 	int execfileNum;
 	int threadNum;
     bool randomSlice;		// enable pseudo-random time slicing

@@ -33,7 +33,7 @@ const int STACK_FENCEPOST = 0xdedbeef;
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
 
-Thread::Thread(char* threadName, int threadID)
+Thread::Thread(char* threadName, int threadID, int _priority )
 {
 	ID = threadID;
     name = threadName;
@@ -45,6 +45,7 @@ Thread::Thread(char* threadName, int threadID)
 					// new thread ignores contents 
 					// of machine registers
     }
+    priority = _priority;
     space = NULL;
 }
 

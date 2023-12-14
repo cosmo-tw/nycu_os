@@ -39,6 +39,7 @@ class Scheduler {
 				// but not running
     Thread *toBeDestroyed;	// finishing thread to be destroyed
     				// by the next thread that runs
+    SortedList<Thread *> *pqList;
 };
 
 #endif // SCHEDULER_H

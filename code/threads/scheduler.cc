@@ -28,10 +28,18 @@
 // 	Initialize the list of ready but not running threads.
 //	Initially, no ready threads.
 //----------------------------------------------------------------------
+static int
+pqSchedulingCompare (Thread *x, Thread *y)
+{
+    if (x->priority < y->priority) { return 1; }
+    else if (x->priority > y->priority) { return -1; }
+    else { return 0; }
+}
 
 Scheduler::Scheduler()
 { 
     readyList = new List<Thread *>; 
+    pqList = new SortedList<Thread*>(pqSchedulingCompare);
     toBeDestroyed = NULL;
 } 
 
@@ -43,6 +51,7 @@ Scheduler::Scheduler()
 Scheduler::~Scheduler()
 { 
     delete readyList; 
+    delete pqList;
 } 
 
 //----------------------------------------------------------------------
@@ -60,7 +69,8 @@ Scheduler::ReadyToRun (Thread *thread)
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
 	//cout << "Putting thread on ready list: " << thread->getName() << endl ;
     thread->setStatus(READY);
-    readyList->Append(thread);
+    //readyList->Append(thread);
+    pqList->Insert(thread);
 }
 
 //----------------------------------------------------------------------
