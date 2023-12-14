@@ -70,7 +70,7 @@ Scheduler::ReadyToRun (Thread* thread)
     thread->setStatus(READY);
     //readyList->Append(thread);
     pqList->Insert(thread);
-    cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl; 
+    // cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl; 
 
 }
 
