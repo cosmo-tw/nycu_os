@@ -49,12 +49,20 @@ Kernel::Kernel(int argc, char **argv)
         	execfile[++execfileNum]= argv[++i];
             threadProirity[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
-		} else if (strcmp(argv[i], "-ep") == 0) {
-            execfile[++execfileNum]= argv[++i];
-            threadProirity[execfileNum] = atoi(argv[++i]);
-            cout << execfile[execfileNum] <<" with proirity "<< threadProirity[execfileNum]<< "\n";
-        
-        } else if (strcmp(argv[i], "-ci") == 0) {
+		} 
+        else if (strcmp(argv[i], "-ep") == 0) {
+        if (i + 2 < argc) {
+            execfileNum++;
+            execfile[execfileNum] = argv[i + 1];
+            threadProirity[execfileNum] = atoi(argv[i + 2]);
+            cout << execfile[execfileNum] << " with priority " << threadProirity[execfileNum] << "\n";
+            i += 2; // Move to the next group of arguments
+        } else {
+            // Handle an error: not enough arguments provided for "-ep"
+            cout << "Error: Not enough arguments for -ep option\n";
+        }
+        }
+        else if (strcmp(argv[i], "-ci") == 0) {
 	    	ASSERT(i + 1 < argc);
 	    	consoleIn = argv[i + 1];
 	    	i++;
