@@ -92,36 +92,56 @@ class Thread {
 
     // basic thread operations
 
-    void Fork(VoidFunctionPtr func, void *arg); 
-    				// Make thread run (*func)(arg)
-    void Yield();  		// Relinquish the CPU if any 
-				// other thread is runnable
-    void Sleep(bool finishing); // Put the thread to sleep and 
-				// relinquish the processor
-    void Begin();		// Startup code for the thread	
-    void Finish();  		// The thread is done executing
-    
-    void CheckOverflow();   	// Check if thread stack has overflowed
+    void Fork(VoidFunctionPtr func, void *arg); // Make thread run (*func)(arg)			
+    void Yield();  		                          // Relinquish the CPU if any other thread is runnable
+    void Sleep(bool finishing);                 // Put the thread to sleep and relinquish the processor
+    void Begin();		                            // Startup code for the thread	
+    void Finish();  		                        // The thread is done executing
+    void CheckOverflow();   	                  // Check if thread stack has overflowed
     void setStatus(ThreadStatus st) { status = st; }
-    ThreadStatus getStatus() { return (status); }
-	char* getName() { return (name); }
-    
-	int getID() { return (ID); }
     void Print() { cout << name; }
-    void SelfTest();		// test whether thread impl is working
+    void SelfTest();		                        // test whether thread impl is working
+
+    ThreadStatus getStatus() { return (status); }
+	  char* getName() { return (name); }
+	  int getID() { return (ID); }
+    
+
+    /* HW4 new add ===================================== */ 
+    void setBurstTime(int t) {burstTime = t;}
+    void setWaitingTime(int t){waitingTime = t;}
+    void setExecutionTime(int t){executionTime = t;}
+    void setPriority(int p){priority = p;}
+    void setL3Time(int t){L3Time = t;}
+    int  getBurstTime(){return (burstTime);}
+    int  getWaitingTime(){return (waitingTime);}
+    int  getExecutionTime(){return (executionTime);}
+    int  getPriority(){return (priority);}
+    int  getL3Time(){return (L3Time);}
+    /*===================================================*/
 
   private:
     // some of the private data for this class is listed above
-    int priority;
     int *stack; 	 	// Bottom of the stack 
-				// NULL if this is the main thread
-				// (If NULL, don't deallocate stack)
+				            // NULL if this is the main thread
+				            // (If NULL, don't deallocate stack)
     ThreadStatus status;	// ready, running or blocked
     char* name;
-	int   ID;
+	  int   ID;
+
+    // Allocate a stack for thread.
+		// Used internally by Fork()
     void StackAllocate(VoidFunctionPtr func, void *arg);
-    				// Allocate a stack for thread.
-				// Used internally by Fork()
+
+    /* HW4 new add ===================================== */
+    int burstTime;
+    int priority;
+    int waitingTime;
+    int executionTime;
+    int L3Time;
+    int priority;
+    /*===================================================*/
+    		
 
 // A thread running a user program actually has *two* sets of CPU registers -- 
 // one for its state while executing user code, one for its state 

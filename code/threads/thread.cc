@@ -221,10 +221,12 @@ Thread::Yield ()
     ASSERT(this == kernel->currentThread);
     
     DEBUG(dbgThread, "Yielding thread: " << name);
-    
+
+    /* HW4 modify  */
+    kernel->scheduler->ReadyToRun(this);
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL) {
-	kernel->scheduler->ReadyToRun(this);
+	
 	kernel->scheduler->Run(nextThread, FALSE);
     }
     (void) kernel->interrupt->SetLevel(oldLevel);
@@ -261,6 +263,14 @@ Thread::Sleep (bool finishing)
     DEBUG(dbgThread, "Sleeping thread: " << name);
 
     status = BLOCKED;
+
+    /* HW4 new add ========================================================= */ 
+    int prevBurstTime = this->getBurstTime();
+    int newBurstTime = 0.5*this->getExecutionTime() + 0.5*prevBurstTime;
+    this->setBurstTime(newBurstTime);
+    int diff = newBurstTime - prevBurstTime;
+    /*===================================================================*/
+
 	//cout << "debug Thread::Sleep " << name << "wait for Idle\n";
     while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL) {
 		kernel->interrupt->Idle();	// no one to run, wait for an interrupt

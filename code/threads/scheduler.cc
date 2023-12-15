@@ -23,23 +23,46 @@
 #include "scheduler.h"
 #include "main.h"
 
+/* HW4 - new add =================================================*/
+static int
+compareL1(Thread* t1, Thread* t2)
+{
+if ( t1->getBurstTime() > t2->getBurstTime() ) return 1;
+else if ( t1->getBurstTime() < t2->getBurstTime() ) return -1;
+else return t1->getID() < t2->getID() ? -1 : 1;
+return 0;
+}
+static int
+compareL2(Thread* t1, Thread* t2)
+{
+if ( t1->getPriority() > t2->getPriority() ) return -1;
+else if( t1->getPriority() < t2->getPriority() ) return 1;
+else return t1->getID() < t2->getID() ? -1 : 1;
+return 0;
+}
+/*==================================================================*/
+
+/* HW3 new add - but no use in HW4 */
+// int pqSchedulingCompare (Thread *x, Thread *y)
+// {
+//     if (x->getpriority() < y->getpriority()) { return 1; } // x has higher priority
+//     else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
+//     else { return 0; } // priorities are equal
+// }
+
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
 // 	Initialize the list of ready but not running threads.
 //	Initially, no ready threads.
 //----------------------------------------------------------------------
-int pqSchedulingCompare (Thread *x, Thread *y)
-{
-    if (x->getpriority() < y->getpriority()) { return 1; } // x has higher priority
-    else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
-    else { return 0; } // priorities are equal
-}
-
-
 Scheduler::Scheduler()
 { 
-    readyList = new List<Thread *>; 
-    pqList = new SortedList<Thread*>(pqSchedulingCompare);
+    // readyList = new List<Thread *>; 
+    // pqList = new SortedList<Thread*>(pqSchedulingCompare);
+    L1ReadyList = new SortedList<Thread *>(compareL1);
+    L2ReadyList = new SortedList<Thread *>(compareL2);
+    L3ReadyList = new List<Thread *>;
+
     toBeDestroyed = NULL;
 } 
 
@@ -50,9 +73,81 @@ Scheduler::Scheduler()
 
 Scheduler::~Scheduler()
 { 
-    delete readyList; 
-    delete pqList;
+    // delete readyList; 
+    // delete pqList;
+
+    /* HW4 new add */
+    delete L1ReadyList;
+    delete L2ReadyList;
+    delete L3ReadyList;
 } 
+
+/* HW4 new add======================================================================= */
+void Scheduler::updatePriority()
+{
+    ListIterator<Thread *> *iter1 = new ListIterator<Thread *>(L1ReadyList);
+    ListIterator<Thread *> *iter2 = new ListIterator<Thread *>(L2ReadyList);
+    ListIterator<Thread *> *iter3 = new ListIterator<Thread *>(L3ReadyList);
+    Statistics *stats = kernel->stats;
+    int oldPriority;
+    int newPriority;
+
+    // L1
+    /* 有問題，沒有ReadyToRun()，有待觀察 */
+    for( ; !iter1->IsDone(); iter1->Next() )
+    {
+        ASSERT( iter1->Item()->getStatus() == READY);
+        iter1->Item()->setWaitingTime(iter1->Item()->getWaitingTime()+TimerTicks);
+        if(iter1->Item()->getWaitingTime() >= 150 && iter1->Item()->getID() > 0 )
+        {
+            oldPriority = iter1->Item()->getPriority();
+            newPriority = oldPriority + 10;
+            if (newPriority > 149)
+                newPriority = 149;
+
+            iter1->Item()->setPriority(newPriority);
+            iter1->Item()->setWaitingTime(0);
+        }
+    }
+
+    // L2
+    for( ; !iter2->IsDone(); iter2->Next() )
+    {
+        ASSERT( iter2->Item()->getStatus() == READY);
+        iter2->Item()->setWaitingTime(iter2->Item()->getWaitingTime()+TimerTicks);
+        if(iter2->Item()->getWaitingTime() >= 1500 && iter2->Item()->getID() > 0 )
+        {
+            oldPriority = iter2->Item()->getPriority();
+            newPriority = oldPriority + 10;
+            if (newPriority > 149)
+                newPriority = 149;
+
+            iter2->Item()->setPriority(newPriority);
+            L2ReadyList->Remove(iter2->Item());
+            ReadyToRun(iter2->Item());
+        }
+    }
+
+    // L3
+    for( ; !iter3->IsDone(); iter3->Next() )
+    {
+        ASSERT( iter3->Item()->getStatus() == READY);
+        iter3->Item()->setWaitingTime(iter3->Item()->getWaitingTime()+TimerTicks);
+        if( iter3->Item()->getWaitingTime() >= 1500 && iter3->Item()->getID() > 0 )
+        {
+            oldPriority = iter3->Item()->getPriority();
+            newPriority = oldPriority + 10;
+            if (newPriority > 149)
+                newPriority = 149;
+
+            iter3->Item()->setPriority(newPriority);
+            L3ReadyList->Remove(iter3->Item());
+            ReadyToRun(iter3->Item());
+        }
+    }
+}
+/*==================================================================================*/
+
 
 //----------------------------------------------------------------------
 // Scheduler::ReadyToRun
@@ -69,16 +164,33 @@ Scheduler::ReadyToRun (Thread* thread)
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
 	//cout << "Putting thread on ready list: " << thread->getName() << endl ;
     thread->setStatus(READY);
-    //readyList->Append(thread);
-    pqList->Insert(thread);
-    // cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl;
-     if( !pqList->IsInList(thread) )
-{
-        DEBUG(dbtwo, "[A] Tick ["<< kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted into queue")
-        pqList->Insert(thread);
-}
 
+    // readyList->Append(thread);
+    // pqList->Insert(thread);
+    
+    // if( !pqList->IsInList(thread) )
+    // {
+    //     DEBUG(dbtwo, "[A] Tick ["<< kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted into queue")
+    //     pqList->Insert(thread);
+    // }
 
+    /* HW4 new add ========================================================== */
+    if(thread->getPriority() >= 100 && thread->getPriority() <= 149)
+    {
+        if( !kernel->scheduler->L1ReadyList->IsInList(thread) )
+            L1ReadyList->Insert(thread);
+    }
+    else if ( (thread->getPriority() >= 50 && thread->getPriority() <= 99) )
+    {
+        if( !L2ReadyList->IsInList(thread) )
+            L2ReadyList->Insert(thread);
+    }
+    else if ( (thread->getPriority() >= 0 && thread->getPriority() <= 49) )
+    {
+        if( !L3ReadyList->IsInList(thread) )    
+            L3ReadyList->Append(thread);
+    }
+    /*========================================================================*/
 }
 
 //----------------------------------------------------------------------

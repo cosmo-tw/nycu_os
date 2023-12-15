@@ -48,6 +48,26 @@ Alarm::CallBack()
 {
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
+
+    /* HW4 new add ======================================================== */
+    kernel->scheduler->updatePriority();
+    Thread *thread = kernel->currentThread;
+    thread->setExecutionTime(thread->getExecutionTime() + TimerTicks);
+    thread->setL3Time(thread->getL3Time() + TimerTicks);
+    if ( kernel->currentThread->getID() > 0
+         && status != IdleMode
+         && kernel->currentThread->getPriority() >= 100 )
+    {
+        interrupt->YieldOnReturn();
+    }
+
+    if ( status != IdleMode && kernel->currentThread->getPriority() < 50 ) 
+    {
+        if ( kernel->currentThread->getL3Time() >= 99 )
+            interrupt->YieldOnReturn();
+
+    }
+    /* ======================================================================= */
     
     //if (status != IdleMode) {
 	//interrupt->YieldOnReturn();
