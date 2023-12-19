@@ -81,7 +81,7 @@ class Thread {
     void *machineState[MachineStateSize];  // all registers except for stackTop
 
   public:
-    Thread(char* debugName, int threadID);		// initialize a Thread 
+    // Thread(char* debugName, int threadID);		// initialize a Thread 
     Thread(char* debugName, int threadID, int _priority);
     
     int getpriority(){return priority;}
@@ -139,7 +139,7 @@ class Thread {
     int waitingTime;
     int executionTime;
     int L3Time;
-    int priority;
+    // int priority;
     /*===================================================*/
     		
 
