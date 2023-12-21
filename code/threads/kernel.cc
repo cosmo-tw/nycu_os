@@ -63,8 +63,10 @@ Kernel::Kernel(int argc, char **argv)
         {
                 execfile[++execfileNum] = argv[++i];
                 int priority = atoi(argv[++i]);
-                ASSERT(priority < 150);
-                ASSERT(priority >= 0 );
+
+                if (priority > 149) priority = 149;
+                else if (priority < 0) priority = 0;
+
                 threadPriority[execfileNum] = priority;
                 cout << execfile[execfileNum] << " with priority " << threadPriority[execfileNum] << "\n";
         }
