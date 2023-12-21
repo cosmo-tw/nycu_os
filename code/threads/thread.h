@@ -107,7 +107,7 @@ class Thread {
     
 
     /* HW4 new add ===================================== */ 
-    void Print() { cout << name; }
+    // void Print() { cout << name; }
     void SelfTest(); // test whether thread impl is working
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }
