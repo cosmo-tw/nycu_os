@@ -126,10 +126,7 @@ Scheduler::FindNextToRun ()
 
     int level;
     Thread *nextThread = NULL;
-    // if (readyList->IsEmpty())
-    // {
-    //     return NULL;
-    // }
+    
     if (!L1ReadyList->IsEmpty())
     {
         nextThread = L1ReadyList->RemoveFront();

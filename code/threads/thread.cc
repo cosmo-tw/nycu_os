@@ -214,6 +214,11 @@ Thread::Yield ()
 
     if (nextThread != NULL) 
     {
+        DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
+                     "]: Thread [" << nextThread->getID() << 
+                     "] is now selected for excution, thread [" << ID << 
+                     "] is replaced, and it has excuted [" << getBurstTime() << 
+                     "] ticks");
         kernel->scheduler->Run(nextThread, FALSE);
     }
 
@@ -256,6 +261,10 @@ Thread::Sleep (bool finishing)
     double time = (double)kernel->stats->totalTicks - getRunningTime();
     setBurstTime(getBurstTime() - time);
     double nextPredictTime = (double)getBurstTime() * 0.5 + getPredictTime() * 0.5;
+    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
+                 "]: Thread [" << ID << 
+                 "] update approximate burst time, from: [" << getPredictTime() << 
+                 "], add [" << getBurstTime() << "], to [" << nextPredictTime << "]");
     setPredictTime(nextPredictTime);
     setRemainingTime(nextPredictTime);
     double prevBusrtTime = getBurstTime();
@@ -267,8 +276,8 @@ Thread::Sleep (bool finishing)
 		kernel->interrupt->Idle();	// no one to run, wait for an interrupt
 	}    
     // returns when it's time for us to run
-    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
-                 "]:Thread [" << nextThread->getID() << 
+    DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
+                 "]: Thread [" << nextThread->getID() << 
                  "] is now selected for excution, thread [" << ID << 
                  "] is replaced, and it has excuted [" << prevBusrtTime << "] ticks");
     kernel->scheduler->Run(nextThread, finishing); 
