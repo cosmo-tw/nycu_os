@@ -56,7 +56,6 @@ Scheduler::Scheduler()
     L1ReadyList = new SortedList<Thread *>(compareRemainingTime);
     L2ReadyList = new SortedList<Thread *>(comparePriority);
     L3ReadyList = new List<Thread *>;
-    L4ReadyList = new List<Thread *>;
 
     toBeDestroyed = NULL;
 } 
@@ -75,7 +74,6 @@ Scheduler::~Scheduler()
     delete L1ReadyList;
     delete L2ReadyList;
     delete L3ReadyList;
-    delete L4ReadyList;
 } 
 
 //----------------------------------------------------------------------
