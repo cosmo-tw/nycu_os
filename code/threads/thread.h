@@ -107,8 +107,8 @@ class Thread {
     /* HW4 new add ===================================== */ 
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }
-    int getLevel() 
-    { return 3 - priority / 50;}
+    int getLevel() { 
+      cout << priority; return 3 - priority / 50;}
     void setBurstTime(double t) { burstTime = t; }
     double getBurstTime() { return burstTime; }
     void setPredictTime(double t) { predictTime = t; }
