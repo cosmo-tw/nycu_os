@@ -206,9 +206,9 @@ Thread::Yield ()
     DEBUG(dbgThread, "Yielding thread: " << name);
 
     /* HW4 modify  */
-    // double time = (double)kernel->stats->totalTicks - getRunningTime();
-    // setBurstTime(getBurstTime() + time); // update burst time
-    // setRemainingTime(getRemainingTime() - time);
+    double time = (double)kernel->stats->totalTicks - getRunningTime();
+    setBurstTime(getBurstTime() + time); // update burst time
+    setRemainingTime(getRemainingTime() - time);
     kernel->scheduler->ReadyToRun(this);
     nextThread = kernel->scheduler->FindNextToRun();
 

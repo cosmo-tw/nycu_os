@@ -54,7 +54,6 @@ Kernel::Kernel(int argc, char **argv)
         else if (strcmp(argv[i], "-e") == 0) 
         {
         	execfile[++execfileNum]= argv[++i];
-            threadPriority[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
 		} 
 

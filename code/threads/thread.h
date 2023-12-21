@@ -96,11 +96,11 @@ class Thread {
     void Finish();  		                        // The thread is done executing
     void CheckOverflow();   	                  // Check if thread stack has overflowed
     void setStatus(ThreadStatus st) { status = st; }
-    void Print() { cout << name; }
     void SelfTest();		                        // test whether thread impl is working
 
     ThreadStatus getStatus() { return (status); }
 	  char* getName() { return (name); }
+    void Print() { cout << name; }
 	  int getID() { return (ID); }
     
 
@@ -108,11 +108,7 @@ class Thread {
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }
     int getLevel() 
-    { 
-      if      ( priority >= 0   && priority < 50  ) return 3;
-      else if ( priority >= 50  && priority < 100 ) return 2;
-      else if ( priority >= 100 && priority < 150 ) return 1;
-    }
+    { return 3 - priority / 50;}
     void setBurstTime(double t) { burstTime = t; }
     double getBurstTime() { return burstTime; }
     void setPredictTime(double t) { predictTime = t; }
