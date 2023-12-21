@@ -96,7 +96,7 @@ void Alarm::Aging()
                 thread->setPriority(min(prevPriority + 10, 149));
                 thread->setTotalWaitingTime(thread -> getTotalWaitingTime() - 1500);
                 nextLevel = thread->getLevel();
-                DEBUG(dbtwo, "[C] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] change itspriority from [" << prevPriority << "] to [" << thread->getPriority() << "]");
+                DEBUG(dbtwo, "[C] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] change its priority from [" << prevPriority << "] to [" << thread->getPriority() << "]");
                 // change to higher level queue
                 if (nextLevel < i)
                 {

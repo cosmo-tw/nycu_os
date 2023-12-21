@@ -201,18 +201,9 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
 
-    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
-                 "]:Thread [" << nextThread->getID() << 
-                 "] now selected for execution, thread [" <<
-                 oldThread->getID() << 
-                 "] is replaced, and it has executed [" << 
-                 kernel->stats->totalTicks - kernel->stats->prevTicks << 
-                 "] ticks");
-
     nextThread->setRunningTime(kernel->stats->totalTicks); // update running time
     nextThread->setTotalWaitingTime(0);                    // reset total waiting time
     SWITCH(oldThread, nextThread);
-    kernel->stats->prevTicks = kernel->stats->totalTicks;
 
     // we're back, running oldThread
       

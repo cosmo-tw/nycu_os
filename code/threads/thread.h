@@ -82,8 +82,6 @@ class Thread {
 
   public:
     Thread(char* debugName, int threadID);		// initialize a Thread 
-    
-    int getpriority(){return priority;}
     ~Thread(); 				// deallocate a Thread
 					            // NOTE -- thread being deleted
 					            // must not be running when delete 
@@ -109,7 +107,12 @@ class Thread {
     /* HW4 new add ===================================== */ 
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }
-    int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
+    int getLevel() 
+    { 
+      if      ( priority >= 0   && priority < 50  ) return 3;
+      else if ( priority >= 50  && priority < 100 ) return 2;
+      else if ( priority >= 100 && priority < 150 ) return 1;
+    }
     void setBurstTime(double t) { burstTime = t; }
     double getBurstTime() { return burstTime; }
     void setPredictTime(double t) { predictTime = t; }
