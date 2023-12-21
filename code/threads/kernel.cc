@@ -293,11 +293,12 @@ void Kernel::ExecAll()
 
 //int Kernel::Exec(char* name)
 int Kernel::Exec(char* name, int priority)
-{
-	t[threadNum+1] = new Thread(name, threadNum+1);
-	t[threadNum+1]->space = new AddrSpace();
-	t[threadNum+1]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum+1]);
-    t[threadNum+1]->setPriority(priority);
+{   
+    cout << "thread name: " << name << "\n";
+	t[threadNum] = new Thread(name, threadNum);
+	t[threadNum]->space = new AddrSpace();
+	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
+    t[threadNum]->setPriority(priority);
 	threadNum++;
 
 	return threadNum-1;
