@@ -94,8 +94,6 @@ Scheduler::ReadyToRun (Thread* thread)
     /* HW4 new add ========================================================== */
     thread->setWaitingTime(kernel->stats->totalTicks);
     int level = thread->getLevel();
-    cout << "priority : " << thread->getPriority() << '\n';
-    cout << "level : " << level << '\n';
     if (level == 1)
     {
         L1ReadyList->Insert(thread);
