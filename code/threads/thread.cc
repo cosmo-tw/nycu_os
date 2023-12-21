@@ -209,12 +209,12 @@ Thread::Yield ()
     double time = (double)kernel->stats->totalTicks - getRunningTime();
     setBurstTime(getBurstTime() + time); // update burst time
     setRemainingTime(getRemainingTime() - time);
-    // kernel->scheduler->ReadyToRun(this);
+    kernel->scheduler->ReadyToRun(this);
     nextThread = kernel->scheduler->FindNextToRun();
 
     if (nextThread != NULL) 
     {
-        kernel->scheduler->ReadyToRun(this);
+        // kernel->scheduler->ReadyToRun(this);
         DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
                      "]: Thread [" << nextThread->getID() << 
                      "] is now selected for excution, thread [" << ID << 
