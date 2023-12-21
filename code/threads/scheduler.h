@@ -29,7 +29,7 @@ class Scheduler {
         return L1ReadyList;
       else if (level == 2)
         return L2ReadyList;
-      else if (level == 3)
+      else
         return L3ReadyList;
     }
 

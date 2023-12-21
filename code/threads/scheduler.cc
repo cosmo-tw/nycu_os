@@ -107,7 +107,7 @@ Scheduler::ReadyToRun (Thread* thread)
     {
         L2ReadyList->Insert(thread);
     }
-    else if (level == 3)
+    else
     {
         L3ReadyList->Append(thread);
     }
