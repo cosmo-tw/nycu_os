@@ -299,8 +299,6 @@ int Kernel::Exec(char* name, int priority)
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
     t[threadNum]->setPriority(priority);
 
-    cout << "thread priority:" << t[0]->getPriority() << "\n";
-
 	threadNum++;
 
 	return threadNum-1;
