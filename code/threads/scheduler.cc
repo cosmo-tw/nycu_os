@@ -94,6 +94,8 @@ Scheduler::ReadyToRun (Thread* thread)
     /* HW4 new add ========================================================== */
     thread->setWaitingTime(kernel->stats->totalTicks);
     int level = thread->getLevel();
+    cout << "priority : " << thread->getPriority();
+    cout << "level : " << level;
     if (level == 1)
     {
         L1ReadyList->Insert(thread);
@@ -126,7 +128,7 @@ Scheduler::FindNextToRun ()
 
     int level;
     Thread *nextThread = NULL;
-    
+
     if (!L1ReadyList->IsEmpty())
     {
         nextThread = L1ReadyList->RemoveFront();
