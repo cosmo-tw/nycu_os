@@ -81,14 +81,13 @@ class Thread {
     void *machineState[MachineStateSize];  // all registers except for stackTop
 
   public:
-    // Thread(char* debugName, int threadID);		// initialize a Thread 
-    Thread(char* debugName, int threadID, int _priority);
+    Thread(char* debugName, int threadID);		// initialize a Thread 
     
     int getpriority(){return priority;}
     ~Thread(); 				// deallocate a Thread
-					// NOTE -- thread being deleted
-					// must not be running when delete 
-					// is called
+					            // NOTE -- thread being deleted
+					            // must not be running when delete 
+					            // is called
 
     // basic thread operations
 
@@ -108,16 +107,23 @@ class Thread {
     
 
     /* HW4 new add ===================================== */ 
-    void setBurstTime(int t) {burstTime = t;}
-    void setWaitingTime(int t){waitingTime = t;}
-    void setExecutionTime(int t){executionTime = t;}
-    void setPriority(int p){priority = p;}
-    void setL3Time(int t){L3Time = t;}
-    int  getBurstTime(){return (burstTime);}
-    int  getWaitingTime(){return (waitingTime);}
-    int  getExecutionTime(){return (executionTime);}
-    int  getPriority(){return (priority);}
-    int  getL3Time(){return (L3Time);}
+    void Print() { cout << name; }
+    void SelfTest(); // test whether thread impl is working
+    void setPriority(int p) { priority = p; }
+    int getPriority() { return priority; }
+    int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
+    void setBurstTime(double t) { burstTime = t; }
+    double getBurstTime() { return burstTime; }
+    void setPredictTime(double t) { predictTime = t; }
+    double getPredictTime() { return predictTime; }
+    void setRemainingTime(double t) { remainingTime = t; }
+    double getRemainingTime() { return remainingTime; }
+    void setRunningTime(double t) { runningTime = t; }
+    double getRunningTime() { return runningTime; }
+    void setWaitingTime(double t) { waitingTime = t; }
+    double getWaitingTime() { return waitingTime; }
+    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
+    double getTotalWaitingTime() { return totalWaitingTime; }
     /*===================================================*/
 
   private:
@@ -134,12 +140,13 @@ class Thread {
     void StackAllocate(VoidFunctionPtr func, void *arg);
 
     /* HW4 new add ===================================== */
-    int burstTime;
-    int priority;
-    int waitingTime;
-    int executionTime;
-    int L3Time;
-    // int priority;
+    int priority;            // scheduling priority (0~149)
+    double burstTime;        // accumulating job execution time
+    double predictTime;      // the predict time for next CPU burst
+    double remainingTime;    // remaining time
+    double runningTime;      // the time of entering the Running state
+    double waitingTime;      // the time of start waiting
+    double totalWaitingTime; // the total wating time
     /*===================================================*/
     		
 

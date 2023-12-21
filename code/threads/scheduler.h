@@ -30,7 +30,15 @@ class Scheduler {
     Thread* FindNextToRun();	// Dequeue first thread on the ready list, if any, and return thread.
 
     // HW4 new add
-    void updatePriority();
+    List<Thread *> *getQueue(int level)
+    {
+      if (level == 1)
+        return L1ReadyList;
+      else if (level == 2)
+        return L2ReadyList;
+      else
+        return L3ReadyList;
+    }
     
     // SelfTest for scheduler is implemented in class Thread
     

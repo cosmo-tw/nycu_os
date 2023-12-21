@@ -37,36 +37,45 @@ Kernel::Kernel(int argc, char **argv)
     hostName = 0;               // machine id, also UNIX socket name
                                 // 0 is the default machine id
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-rs") == 0) {
+        if (strcmp(argv[i], "-rs") == 0)
+        {
  	    	ASSERT(i + 1 < argc);
 	    	RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
 			// number generator
 	    	randomSlice = TRUE;
 	    	i++;
-        } else if (strcmp(argv[i], "-s") == 0) {
+        } 
+
+        else if (strcmp(argv[i], "-s") == 0) 
+        {
             debugUserProg = TRUE;
-		} else if (strcmp(argv[i], "-e") == 0) {
+		} 
+
+        else if (strcmp(argv[i], "-e") == 0) 
+        {
         	execfile[++execfileNum]= argv[++i];
-            threadProirity[execfileNum] = 0;
+            threadPriority[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
 		} 
-        else if (strcmp(argv[i], "-ep") == 0) {
-        if (i + 2 < argc) {
-            execfileNum++;
-            execfile[execfileNum] = argv[i + 1];
-            threadProirity[execfileNum] = atoi(argv[i + 2]);
-            cout << execfile[execfileNum] << " with priority " << threadProirity[execfileNum] << "\n";
-            i += 2; // Move to the next group of arguments
-        } else {
-            // Handle an error: not enough arguments provided for "-ep"
-            cout << "Error: Not enough arguments for -ep option\n";
+
+        // HW4 modify
+        else if (strcmp(argv[i], "-ep") == 0) 
+        {
+                execfile[++execfileNum] = argv[++i];
+                int priority = atoi(argv[++i]);
+                ASSERT(priority < 150);
+                ASSERT(priority >= 0 );
+                threadPriority[execfileNum] = priority;
+                cout << execfile[execfileNum] << " with priority " << threadPriority[execfileNum] << "\n";
         }
-        }
-        else if (strcmp(argv[i], "-ci") == 0) {
+        else if (strcmp(argv[i], "-ci") == 0) 
+        {
 	    	ASSERT(i + 1 < argc);
 	    	consoleIn = argv[i + 1];
 	    	i++;
-		} else if (strcmp(argv[i], "-co") == 0) {
+		} 
+        else if (strcmp(argv[i], "-co") == 0) 
+        {
 	    	ASSERT(i + 1 < argc);
 	    	consoleOut = argv[i + 1];
 	    	i++;
@@ -275,23 +284,19 @@ void ForkExecute(Thread *t)
 void Kernel::ExecAll()
 {
 	for (int i=1;i<=execfileNum;i++) {
-		int a = Exec(execfile[i], threadProirity[i]);
+		int a = Exec(execfile[i], threadPriority[i]);
 	}
 	currentThread->Finish();
-    //Kernel::Exec();	
 }
 
 
 //int Kernel::Exec(char* name)
-int Kernel::Exec(char* name, int InitPriority)
+int Kernel::Exec(char* name, int priority)
 {
-	t[threadNum] = new Thread(name, threadNum, InitPriority);
-    t[threadNum]->setBurstTime(0);
-    t[threadNum]->setWaitingTime(0);
-    t[threadNum]->setExecutionTime(0);
-    t[threadNum]->setPriority(InitPriority);
+	t[threadNum] = new Thread(name, threadNum);
 	t[threadNum]->space = new AddrSpace();
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
+    t[threadNum]->setPriority(priority);
 	threadNum++;
 
 	return threadNum-1;

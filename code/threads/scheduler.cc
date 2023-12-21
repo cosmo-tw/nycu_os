@@ -23,25 +23,6 @@
 #include "scheduler.h"
 #include "main.h"
 
-/* HW4 - new add =================================================*/
-static int
-compareL1(Thread* t1, Thread* t2)
-{
-if ( t1->getBurstTime() > t2->getBurstTime() ) return 1;
-else if ( t1->getBurstTime() < t2->getBurstTime() ) return -1;
-else return t1->getID() < t2->getID() ? -1 : 1;
-return 0;
-}
-static int
-compareL2(Thread* t1, Thread* t2)
-{
-if ( t1->getPriority() > t2->getPriority() ) return -1;
-else if( t1->getPriority() < t2->getPriority() ) return 1;
-else return t1->getID() < t2->getID() ? -1 : 1;
-return 0;
-}
-/*==================================================================*/
-
 /* HW3 new add - but no use in HW4 */
 // int pqSchedulingCompare (Thread *x, Thread *y)
 // {
@@ -49,6 +30,19 @@ return 0;
 //     else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
 //     else { return 0; } // priorities are equal
 // }
+
+/* HW4 new add======================================================================= */
+int compareRemainingTime(Thread* x, Thread* y)
+{
+if (x->getRemainingTime() == y->getRemainingTime()) return 0;
+return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
+}
+int comparePriority(Thread* x, Thread* y)
+{
+if (x->getPriority() == y->getPriority()) return 0;
+return (x->getPriority() < y->getPriority()) ? 1 : -1;
+}
+/*==================================================================================*/
 
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
@@ -59,8 +53,8 @@ Scheduler::Scheduler()
 { 
     // readyList = new List<Thread *>; 
     // pqList = new SortedList<Thread*>(pqSchedulingCompare);
-    L1ReadyList = new SortedList<Thread *>(compareL1);
-    L2ReadyList = new SortedList<Thread *>(compareL2);
+    L1ReadyList = new SortedList<Thread *>(compareRemainingTime);
+    L2ReadyList = new SortedList<Thread *>(comparePriority);
     L3ReadyList = new List<Thread *>;
 
     toBeDestroyed = NULL;
@@ -82,73 +76,6 @@ Scheduler::~Scheduler()
     delete L3ReadyList;
 } 
 
-/* HW4 new add======================================================================= */
-void Scheduler::updatePriority()
-{
-    ListIterator<Thread *> *iter1 = new ListIterator<Thread *>(L1ReadyList);
-    ListIterator<Thread *> *iter2 = new ListIterator<Thread *>(L2ReadyList);
-    ListIterator<Thread *> *iter3 = new ListIterator<Thread *>(L3ReadyList);
-    Statistics *stats = kernel->stats;
-    int oldPriority;
-    int newPriority;
-
-    // L1
-    /* 有問題，沒有ReadyToRun()，有待觀察 */
-    for( ; !iter1->IsDone(); iter1->Next() )
-    {
-        ASSERT( iter1->Item()->getStatus() == READY);
-        iter1->Item()->setWaitingTime(iter1->Item()->getWaitingTime()+TimerTicks);
-        if(iter1->Item()->getWaitingTime() >= 150 && iter1->Item()->getID() > 0 )
-        {
-            oldPriority = iter1->Item()->getPriority();
-            newPriority = oldPriority + 10;
-            if (newPriority > 149)
-                newPriority = 149;
-
-            iter1->Item()->setPriority(newPriority);
-            iter1->Item()->setWaitingTime(0);
-        }
-    }
-
-    // L2
-    for( ; !iter2->IsDone(); iter2->Next() )
-    {
-        ASSERT( iter2->Item()->getStatus() == READY);
-        iter2->Item()->setWaitingTime(iter2->Item()->getWaitingTime()+TimerTicks);
-        if(iter2->Item()->getWaitingTime() >= 1500 && iter2->Item()->getID() > 0 )
-        {
-            oldPriority = iter2->Item()->getPriority();
-            newPriority = oldPriority + 10;
-            if (newPriority > 149)
-                newPriority = 149;
-
-            iter2->Item()->setPriority(newPriority);
-            L2ReadyList->Remove(iter2->Item());
-            ReadyToRun(iter2->Item());
-        }
-    }
-
-    // L3
-    for( ; !iter3->IsDone(); iter3->Next() )
-    {
-        ASSERT( iter3->Item()->getStatus() == READY);
-        iter3->Item()->setWaitingTime(iter3->Item()->getWaitingTime()+TimerTicks);
-        if( iter3->Item()->getWaitingTime() >= 1500 && iter3->Item()->getID() > 0 )
-        {
-            oldPriority = iter3->Item()->getPriority();
-            newPriority = oldPriority + 10;
-            if (newPriority > 149)
-                newPriority = 149;
-
-            iter3->Item()->setPriority(newPriority);
-            L3ReadyList->Remove(iter3->Item());
-            ReadyToRun(iter3->Item());
-        }
-    }
-}
-/*==================================================================================*/
-
-
 //----------------------------------------------------------------------
 // Scheduler::ReadyToRun
 // 	Mark a thread as ready, but not running.
@@ -163,33 +90,24 @@ Scheduler::ReadyToRun (Thread* thread)
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
 	//cout << "Putting thread on ready list: " << thread->getName() << endl ;
-    thread->setStatus(READY);
-
-    // readyList->Append(thread);
-    // pqList->Insert(thread);
-    
-    // if( !pqList->IsInList(thread) )
-    // {
-    //     DEBUG(dbtwo, "[A] Tick ["<< kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted into queue")
-    //     pqList->Insert(thread);
-    // }
 
     /* HW4 new add ========================================================== */
-    if(thread->getPriority() >= 100 && thread->getPriority() <= 149)
+    thread->setWaitingTime(kernel->stats->totalTicks);
+    int level = thread->getLevel();
+    if (level == 1)
     {
-        if( !kernel->scheduler->L1ReadyList->IsInList(thread) )
-            L1ReadyList->Insert(thread);
+        L1ReadyList->Insert(thread);
     }
-    else if ( (thread->getPriority() >= 50 && thread->getPriority() <= 99) )
+    else if (level == 2)
     {
-        if( !L2ReadyList->IsInList(thread) )
-            L2ReadyList->Insert(thread);
+        L2ReadyList->Insert(thread);
     }
-    else if ( (thread->getPriority() >= 0 && thread->getPriority() <= 49) )
+    else
     {
-        if( !L3ReadyList->IsInList(thread) )    
-            L3ReadyList->Append(thread);
+        L3ReadyList->Append(thread);
     }
+    thread->setStatus(READY);
+    DEBUG(dbtwo, "[A] Tick [" << kernel->stats->totalTicks << "]:Thread [" << thread->getID() << "] is inserted into queue L[" << level << "]");
     /*========================================================================*/
 }
 
@@ -206,18 +124,33 @@ Scheduler::FindNextToRun ()
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
-    if (pqList->IsEmpty()) {
-		return NULL;
-    } else {
-    	return pqList->RemoveFront();
+    int level;
+    Thread *nextThread = NULL;
+    // if (readyList->IsEmpty())
+    // {
+    //     return NULL;
+    // }
+    if (!L1ReadyList->IsEmpty())
+    {
+        nextThread = L1ReadyList->RemoveFront();
+        level = 1;
     }
-    if (pqList->IsEmpty()) {
+    else if (!L2ReadyList->IsEmpty())
+    {
+        nextThread = L2ReadyList->RemoveFront();
+        level = 2;
+    }
+    else if (!L3ReadyList->IsEmpty())
+    {
+        nextThread = L3ReadyList->RemoveFront();
+        level = 3;
+    }
+    else
+    {
         return NULL;
-    } else {
-        DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << "]:Thread [" << pqList ->RemoveFront()->getID() << "] is removeed from queue");
-        return pqList ->RemoveFront();
     }
-
+    DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << "]:Thread [" << nextThread->getID() << "] is removed from queue L[" << level << "]");
+    return nextThread;
 }
 
 //----------------------------------------------------------------------
@@ -244,18 +177,19 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     
     ASSERT(kernel->interrupt->getLevel() == IntOff);
 
-    if (finishing) {	// mark that we need to delete current thread
-         ASSERT(toBeDestroyed == NULL);
-	 toBeDestroyed = oldThread;
+    if (finishing) 
+    {	// mark that we need to delete current thread
+        ASSERT(toBeDestroyed == NULL);
+	    toBeDestroyed = oldThread;
     }
     
-    if (oldThread->space != NULL) {	// if this thread is a user program,
+    if (oldThread->space != NULL) 
+    {	                                // if this thread is a user program,
         oldThread->SaveUserState(); 	// save the user's CPU registers
-	oldThread->space->SaveState();
+	    oldThread->space->SaveState();
     }
     
-    oldThread->CheckOverflow();		    // check if the old thread
-					    // had an undetected stack overflow
+    oldThread->CheckOverflow();		    // check if the old thread had an undetected stack overflow
 
     kernel->currentThread = nextThread;  // switch to the next thread
     nextThread->setStatus(RUNNING);      // nextThread is now running
@@ -266,6 +200,7 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
+
     DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
                  "]:Thread [" << nextThread->getID() << 
                  "] now selected for execution, thread [" <<
@@ -273,10 +208,11 @@ Scheduler::Run (Thread *nextThread, bool finishing)
                  "] is replaced, and it has executed [" << 
                  kernel->stats->totalTicks - kernel->stats->prevTicks << 
                  "] ticks");
-    //cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
+
+    nextThread->setRunningTime(kernel->stats->totalTicks); // update running time
+    nextThread->setTotalWaitingTime(0);                    // reset total waiting time
     SWITCH(oldThread, nextThread);
     kernel->stats->prevTicks = kernel->stats->totalTicks;
-    // SWITCH(oldThread, nextThread);
 
     // we're back, running oldThread
       
