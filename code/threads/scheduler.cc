@@ -103,7 +103,7 @@ Scheduler::ReadyToRun (Thread* thread)
     }
     else if (level == 2)
     {
-        cout<< "L2 insert\n";
+        cout<< "L2 insert" << thread->getName() << "\n";
         L2ReadyList->Insert(thread);
     }
     else
