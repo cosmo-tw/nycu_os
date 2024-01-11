@@ -82,13 +82,10 @@ class Thread {
 
   public:
     Thread(char* debugName, int threadID);		// initialize a Thread 
-    Thread(char* debugName, int threadID, int _priority);
-    
-    int getpriority(){return priority;}
     ~Thread(); 				// deallocate a Thread
-					// NOTE -- thread being deleted
-					// must not be running when delete 
-					// is called
+					            // NOTE -- thread being deleted
+					            // must not be running when delete 
+					            // is called
 
     // basic thread operations
 
@@ -99,12 +96,49 @@ class Thread {
     void Finish();  		                        // The thread is done executing
     void CheckOverflow();   	                  // Check if thread stack has overflowed
     void setStatus(ThreadStatus st) { status = st; }
+    void SelfTest();		                        // test whether thread impl is working
+
     ThreadStatus getStatus() { return (status); }
 	  char* getName() { return (name); }
     
 	  int getID() { return (ID); }
     void Print() { cout << name; }
-    void SelfTest();		// test whether thread impl is working
+	  int getID() { return (ID); }
+    
+
+    /* HW4 new add ===================================== */ 
+    void setPriority(int p) { priority = p; }
+    int getPriority() { return priority; }
+    int getLevel() { return 3 - priority / 50;}
+    void setBurstTime(double t) { burstTime = t; }
+    double getBurstTime() { return burstTime; }
+    void setPredictTime(double t) { predictTime = t; }
+    double getPredictTime() { return predictTime; }
+    void setRemainingTime(double t) { remainingTime = t; }
+    double getRemainingTime() { return remainingTime; }
+    void setRunningTime(double t) { runningTime = t; }
+    double getRunningTime() { return runningTime; }
+    void setWaitingTime(double t) { waitingTime = t; }
+    double getWaitingTime() { return waitingTime; }
+    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
+    double getTotalWaitingTime() { return totalWaitingTime; }
+    /*===================================================*/
+
+    void setPriority(int p) { priority = p; }
+    int getPriority() { return priority; }
+    int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
+    void setBurstTime(double t) { burstTime = t; }
+    double getBurstTime() { return burstTime; }
+    void setPredictTime(double t) { predictTime = t; }
+    double getPredictTime() { return predictTime; }
+    void setRemainingTime(double t) { remainingTime = t; }
+    double getRemainingTime() { return remainingTime; }
+    void setRunningTime(double t) { runningTime = t; }
+    double getRunningTime() { return runningTime; }
+    void setWaitingTime(double t) { waitingTime = t; }
+    double getWaitingTime() { return waitingTime; }
+    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
+    double getTotalWaitingTime() { return totalWaitingTime; }
 
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }

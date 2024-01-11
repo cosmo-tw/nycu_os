@@ -59,16 +59,33 @@ Kernel::Kernel(int argc, char **argv)
         } 
         else if (strcmp(argv[i], "-s") == 0) {
             debugUserProg = TRUE;
-		} else if (strcmp(argv[i], "-e") == 0) {
+		} 
+
+        else if (strcmp(argv[i], "-e") == 0) 
+        {
         	execfile[++execfileNum]= argv[++i];
             filePriority[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
 		} 
+        else if (strcmp(argv[i], "-ep") == 0) {
+        if (i + 2 < argc) {
+            execfileNum++;
+            execfile[execfileNum] = argv[i + 1];
+            threadProirity[execfileNum] = atoi(argv[i + 2]);
+            cout << execfile[execfileNum] << " with priority " << threadProirity[execfileNum] << "\n";
+            i += 2; // Move to the next group of arguments
+        } else {
+            // Handle an error: not enough arguments provided for "-ep"
+            cout << "Error: Not enough arguments for -ep option\n";
+        }
+        }
         else if (strcmp(argv[i], "-ci") == 0) {
 	    	ASSERT(i + 1 < argc);
 	    	consoleIn = argv[i + 1];
 	    	i++;
-		} else if (strcmp(argv[i], "-co") == 0) {
+		} 
+        else if (strcmp(argv[i], "-co") == 0) 
+        {
 	    	ASSERT(i + 1 < argc);
 	    	consoleOut = argv[i + 1];
 	    	i++;
@@ -280,7 +297,6 @@ void Kernel::ExecAll()
 		int a = Exec(execfile[i], filePriority[i]);
 	}
 	currentThread->Finish();
-    //Kernel::Exec();	
 }
 
 
@@ -295,6 +311,7 @@ int Kernel::Exec(char* name, int priority)
 	threadNum++;
 	
 
+	return threadNum-1;
 	return threadNum-1;
 /*
     cout << "Total threads number is " << execfileNum << endl;
@@ -326,10 +343,5 @@ int Kernel::Exec(char* name, int priority)
 int Kernel::CreateFile(char *filename)
 {
 	return fileSystem->Create(filename);
-}
-
-void Kernel::PrintInt(int number)
-{
-	return synchConsoleOut->PutInt(number);
 }
 

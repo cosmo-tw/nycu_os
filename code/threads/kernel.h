@@ -45,8 +45,8 @@ class Kernel {
     int  CreateFile(char* filename); // fileSystem call
     void PrintInt(int number);       // print
 
-// These are public for notational convenience; really, 
-// they're global variables used everywhere.
+    // These are public for notational convenience; really, 
+    // they're global variables used everywhere.
 
     Thread *currentThread;	// the thread holding the CPU
     Scheduler *scheduler;	// the ready list
@@ -61,7 +61,8 @@ class Kernel {
     PostOfficeInput *postOfficeIn;
     PostOfficeOutput *postOfficeOut;
 
-    int hostName;               // machine identifier
+    int hostName;            // machine identifier
+    int threadPriority[10];  // HW4 new added
 
   private:
 

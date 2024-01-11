@@ -33,7 +33,7 @@ const int STACK_FENCEPOST = 0xdedbeef;
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
 
-Thread::Thread(char* threadName, int threadID )
+Thread::Thread(char* threadName, int threadID)
 {
 	ID       = threadID;
     name     = threadName;
@@ -65,7 +65,7 @@ Thread::~Thread()
     DEBUG(dbgThread, "Deleting thread: " << name);
     ASSERT(this != kernel->currentThread);
     if (stack != NULL)
-	DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
+	    DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
 }
 
 //----------------------------------------------------------------------
@@ -219,6 +219,7 @@ Thread::Yield ()
                      "] is replaced, and it has excuted ["<< getBurstTime() << "] ticks");
 	    kernel->scheduler->Run(nextThread, FALSE);
     }
+
     (void) kernel->interrupt->SetLevel(oldLevel);
 }
 
