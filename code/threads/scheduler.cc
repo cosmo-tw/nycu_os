@@ -23,34 +23,6 @@
 #include "scheduler.h"
 #include "main.h"
 
-/* HW3 new add - but no use in HW4 */
-// int pqSchedulingCompare (Thread *x, Thread *y)
-// {
-//     if (x->getpriority() < y->getpriority()) { return 1; } // x has higher priority
-//     else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
-//     else { return 0; } // priorities are equal
-// }
-
-/* HW4 new add======================================================================= */
-static int
-compareL1(Thread* t1, Thread* t2)
-{
-if ( t1->getBurstTime() > t2->getBurstTime() ) return 1;
-else if ( t1->getBurstTime() < t2->getBurstTime() ) return -1;
-else return t1->getID() < t2->getID() ? -1 : 1;
-return 0;
-}
-static int
-compareL2(Thread* t1, Thread* t2)
-{
-if ( t1->getPriority() > t2->getPriority() ) return -1;
-else if( t1->getPriority() < t2->getPriority() ) return 1;
-else return t1->getID() < t2->getID() ? -1 : 1;
-return 0;
-}
-
-/*==================================================================================*/
-
 //----------------------------------------------------------------------
 // Scheduler::Scheduler
 // 	Initialize the list of ready but not running threads.
@@ -70,8 +42,6 @@ int comparePriority(Thread *x, Thread *y)
 
 Scheduler::Scheduler()
 { 
-    readyList = new List<Thread *>; 
-    pqList = new SortedList<Thread*>(pqSchedulingCompare);
     toBeDestroyed = NULL;
     L1queue = new SortedList<Thread *>(compareRemainingTime);
     L2queue = new SortedList<Thread *>(comparePriority);

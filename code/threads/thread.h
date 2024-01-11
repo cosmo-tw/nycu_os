@@ -103,43 +103,7 @@ class Thread {
     
 	  int getID() { return (ID); }
     void Print() { cout << name; }
-	  int getID() { return (ID); }
-    
-
-    /* HW4 new add ===================================== */ 
-    void setPriority(int p) { priority = p; }
-    int getPriority() { return priority; }
-    int getLevel() { return 3 - priority / 50;}
-    void setBurstTime(double t) { burstTime = t; }
-    double getBurstTime() { return burstTime; }
-    void setPredictTime(double t) { predictTime = t; }
-    double getPredictTime() { return predictTime; }
-    void setRemainingTime(double t) { remainingTime = t; }
-    double getRemainingTime() { return remainingTime; }
-    void setRunningTime(double t) { runningTime = t; }
-    double getRunningTime() { return runningTime; }
-    void setWaitingTime(double t) { waitingTime = t; }
-    double getWaitingTime() { return waitingTime; }
-    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
-    double getTotalWaitingTime() { return totalWaitingTime; }
-    /*===================================================*/
-
-    void setPriority(int p) { priority = p; }
-    int getPriority() { return priority; }
-    int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
-    void setBurstTime(double t) { burstTime = t; }
-    double getBurstTime() { return burstTime; }
-    void setPredictTime(double t) { predictTime = t; }
-    double getPredictTime() { return predictTime; }
-    void setRemainingTime(double t) { remainingTime = t; }
-    double getRemainingTime() { return remainingTime; }
-    void setRunningTime(double t) { runningTime = t; }
-    double getRunningTime() { return runningTime; }
-    void setWaitingTime(double t) { waitingTime = t; }
-    double getWaitingTime() { return waitingTime; }
-    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
-    double getTotalWaitingTime() { return totalWaitingTime; }
-
+  
     void setPriority(int p) { priority = p; }
     int getPriority() { return priority; }
     int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
