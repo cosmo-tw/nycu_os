@@ -39,7 +39,6 @@ int compareRemainingTime(Thread* x, Thread* y)
 }
 int comparePriority(Thread* x, Thread* y)
 {
-    cerr << x->getName() << " and " << y->getName() << "\n";
     if (x->getPriority() == y->getPriority()) return 0;
     return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
@@ -100,15 +99,24 @@ Scheduler::ReadyToRun (Thread* thread)
     int level = thread->getLevel();
     if (level == 1)
     {
-        L1ReadyList->Insert(thread);
+        if( !kernel->scheduler->L1ReadyList->IsInList(thread) )
+        {
+            L1ReadyList->Insert(thread);
+        }
     }
     else if (level == 2)
     {
-        L2ReadyList->Insert(thread);
+        if( !L2ReadyList->IsInList(thread) )
+        {
+            L2ReadyList->Insert(thread);
+        }
     }
     else
     {
-        L3ReadyList->Append(thread);
+        if( !L3ReadyList->IsInList(thread) )
+        {
+            L3ReadyList->Append(thread);
+        }
     }
     thread->setStatus(READY);
     DEBUG(dbtwo, "[A] Tick [" << kernel->stats->totalTicks << "]:Thread [" << thread->getID() << "] is inserted into queue L[" << level << "]");
