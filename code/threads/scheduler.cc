@@ -32,16 +32,23 @@
 // }
 
 /* HW4 new add======================================================================= */
-int compareRemainingTime(Thread* x, Thread* y)
+static int
+compareL1(Thread* t1, Thread* t2)
 {
-    if (x->getRemainingTime() == y->getRemainingTime()) return 0;
-    return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
+if ( t1->getBurstTime() > t2->getBurstTime() ) return 1;
+else if ( t1->getBurstTime() < t2->getBurstTime() ) return -1;
+else return t1->getID() < t2->getID() ? -1 : 1;
+return 0;
 }
-int comparePriority(Thread* x, Thread* y)
+static int
+compareL2(Thread* t1, Thread* t2)
 {
-    if (x->getPriority() == y->getPriority()) return 0;
-    return (x->getPriority() < y->getPriority()) ? 1 : -1;
+if ( t1->getPriority() > t2->getPriority() ) return -1;
+else if( t1->getPriority() < t2->getPriority() ) return 1;
+else return t1->getID() < t2->getID() ? -1 : 1;
+return 0;
 }
+
 /*==================================================================================*/
 
 //----------------------------------------------------------------------
@@ -53,8 +60,8 @@ Scheduler::Scheduler()
 { 
     // readyList = new List<Thread *>; 
     // pqList = new SortedList<Thread*>(pqSchedulingCompare);
-    L1ReadyList = new SortedList<Thread *>(compareRemainingTime);
-    L2ReadyList = new SortedList<Thread *>(comparePriority);
+    L1ReadyList = new SortedList<Thread *>(compareL1);
+    L2ReadyList = new SortedList<Thread *>(compareL2);
     L3ReadyList = new List<Thread *>;
 
     toBeDestroyed = NULL;
