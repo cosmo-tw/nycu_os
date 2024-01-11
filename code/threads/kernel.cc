@@ -26,42 +26,44 @@
 
 Kernel::Kernel(int argc, char **argv)
 {
-    randomSlice = FALSE; 
+    randomSlice   = FALSE; 
     debugUserProg = FALSE;
-    consoleIn = NULL;          // default is stdin
-    consoleOut = NULL;         // default is stdout
+    consoleIn     = NULL;         // default is stdin
+    consoleOut    = NULL;         // default is stdout
 #ifndef FILESYS_STUB
     formatFlag = FALSE;
 #endif
     reliability = 1;            // network reliability, default is 1.0
-    hostName = 0;               // machine id, also UNIX socket name
+    hostName    = 0;            // machine id, also UNIX socket name
                                 // 0 is the default machine id
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "-rs") == 0) {
+    for (int i = 1; i < argc; i++) 
+    {   
+        if (strcmp(argv[i],"-ep")==0)
+        {
+            execfile[++execfileNum] = argv[++i];
+            int priority = atoi(argv[++i]);
+
+            if (priority >= 150) priority = 149;
+            else if (priority < 0) priority = 0;
+
+            filePriority[execfileNum] = priority;
+            cout << execfile[execfileNum] << " with priority " << filePriority[execfileNum] << "\n";
+        }
+        else if (strcmp(argv[i], "-rs") == 0) 
+        {
  	    	ASSERT(i + 1 < argc);
 	    	RandomInit(atoi(argv[i + 1]));// initialize pseudo-random
 			// number generator
 	    	randomSlice = TRUE;
 	    	i++;
-        } else if (strcmp(argv[i], "-s") == 0) {
+        } 
+        else if (strcmp(argv[i], "-s") == 0) {
             debugUserProg = TRUE;
 		} else if (strcmp(argv[i], "-e") == 0) {
         	execfile[++execfileNum]= argv[++i];
-            threadProirity[execfileNum] = 0;
+            filePriority[execfileNum] = 0;
 			cout << execfile[execfileNum] << "\n";
 		} 
-        else if (strcmp(argv[i], "-ep") == 0) {
-        if (i + 2 < argc) {
-            execfileNum++;
-            execfile[execfileNum] = argv[i + 1];
-            threadProirity[execfileNum] = atoi(argv[i + 2]);
-            cout << execfile[execfileNum] << " with priority " << threadProirity[execfileNum] << "\n";
-            i += 2; // Move to the next group of arguments
-        } else {
-            // Handle an error: not enough arguments provided for "-ep"
-            cout << "Error: Not enough arguments for -ep option\n";
-        }
-        }
         else if (strcmp(argv[i], "-ci") == 0) {
 	    	ASSERT(i + 1 < argc);
 	    	consoleIn = argv[i + 1];
@@ -275,7 +277,7 @@ void ForkExecute(Thread *t)
 void Kernel::ExecAll()
 {
 	for (int i=1;i<=execfileNum;i++) {
-		int a = Exec(execfile[i], threadProirity[i]);
+		int a = Exec(execfile[i], filePriority[i]);
 	}
 	currentThread->Finish();
     //Kernel::Exec();	
@@ -283,16 +285,17 @@ void Kernel::ExecAll()
 
 
 //int Kernel::Exec(char* name)
-int Kernel::Exec(char* name, int InitPriority)
-
+int Kernel::Exec(char* name, int priority)
 {
-    threadNum++;
-	t[threadNum] = new Thread(name, threadNum, InitPriority);
+
+	t[threadNum] = new Thread(name, threadNum);
 	t[threadNum]->space = new AddrSpace();
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
+    t[threadNum]->setPriority(priority);
+	threadNum++;
 	
 
-	return threadNum;
+	return threadNum-1;
 /*
     cout << "Total threads number is " << execfileNum << endl;
     for (int n=1;n<=execfileNum;n++) {

@@ -35,11 +35,11 @@ const int STACK_FENCEPOST = 0xdedbeef;
 
 Thread::Thread(char* threadName, int threadID )
 {
-	ID = threadID;
-    name = threadName;
+	ID       = threadID;
+    name     = threadName;
     stackTop = NULL;
-    stack = NULL;
-    status = JUST_CREATED;
+    stack    = NULL;
+    status   = JUST_CREATED;
     for (int i = 0; i < MachineStateSize; i++) {
 	machineState[i] = NULL;		// not strictly necessary, since
 					// new thread ignores contents 
@@ -48,21 +48,6 @@ Thread::Thread(char* threadName, int threadID )
     space = NULL;
 }
 
-Thread::Thread(char* threadName, int threadID, int _priority)
-{
-	ID = threadID;
-    name = threadName;
-    stackTop = NULL;
-    stack = NULL;
-    status = JUST_CREATED;
-    for (int i = 0; i < MachineStateSize; i++) {
-	machineState[i] = NULL;		// not strictly necessary, since
-					// new thread ignores contents 
-					// of machine registers
-    }
-    space = NULL;   // user space. NOT kernel space
-    priority = _priority;
-}
 //----------------------------------------------------------------------
 // Thread::~Thread
 // 	De-allocate a thread.
@@ -221,11 +206,18 @@ Thread::Yield ()
     ASSERT(this == kernel->currentThread);
     
     DEBUG(dbgThread, "Yielding thread: " << name);
-    
+
+    double time = (double)kernel->stats->totalTicks - getRunningTime();
+    setBurstTime(getBurstTime() + time);
+    setRemainingTime(getRemainingTime() - time);
+    kernel->scheduler->ReadyToRun(this);
     nextThread = kernel->scheduler->FindNextToRun();
     if (nextThread != NULL) {
-	kernel->scheduler->ReadyToRun(this);
-	kernel->scheduler->Run(nextThread, FALSE);
+        DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
+                     "]: Thread [" << nextThread->getID() << 
+                     "] is now selected forexcution, thread [" << ID << 
+                     "] is replaced, and it has excuted ["<< getBurstTime() << "] ticks");
+	    kernel->scheduler->Run(nextThread, FALSE);
     }
     (void) kernel->interrupt->SetLevel(oldLevel);
 }
@@ -262,10 +254,29 @@ Thread::Sleep (bool finishing)
 
     status = BLOCKED;
 	//cout << "debug Thread::Sleep " << name << "wait for Idle\n";
-    while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL) {
+
+    double time = (double)kernel->stats->totalTicks - getRunningTime();
+    setBurstTime(getBurstTime() - time);
+    double nextPredictTime = (double)getBurstTime() * 0.5 +
+                             getPredictTime() * 0.5;
+    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
+                 "]: Thread [" << ID << 
+                 "] update approximate burst time, from: [" << getPredictTime() << 
+                 "], add [" << getBurstTime() << "], to [" << nextPredictTime << "]");
+    setPredictTime(nextPredictTime);
+    setRemainingTime(nextPredictTime);
+    double prevBusrtTime = getBurstTime();
+    setBurstTime(0);
+
+    while ((nextThread = kernel->scheduler->FindNextToRun()) == NULL) 
+    {
 		kernel->interrupt->Idle();	// no one to run, wait for an interrupt
 	}    
     // returns when it's time for us to run
+    DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
+                 "]: Thread [" << nextThread->getID() << 
+                 "] is now selected for excution, thread [" << ID << 
+                 "] is replaced, and it has excuted [" << prevBusrtTime << "] ticks");
     kernel->scheduler->Run(nextThread, finishing); 
 }
 

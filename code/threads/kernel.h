@@ -29,25 +29,21 @@ class SynchDisk;
 
 class Kernel {
   public:
-    Kernel(int argc, char **argv);
-    				// Interpret command line arguments
-    ~Kernel();		        // deallocate the kernel
+    Kernel(int argc, char **argv); // Interpret command line arguments	
+    ~Kernel();		                 // deallocate the kernel
     
-    void Initialize(); 		// initialize the kernel -- separated
-				// from constructor because 
-				// refers to "kernel" as a global
-	void ExecAll();
-	//int Exec(char* name);
-    int Exec(char* name, int Initial_Priority);
+    void Initialize(); 		         // initialize the kernel -- separated from constructor because refers to "kernel" as a global
+	  void ExecAll();
+    int  Exec(char* name, int Initial_Priority);
 
-    void ThreadSelfTest();	// self test of threads and synchronization
-	
+    void ThreadSelfTest();	    // self test of threads and synchronization
     void ConsoleTest();         // interactive console self test
     void NetworkTest();         // interactive 2-machine network test
-	Thread* getThread(int threadID){return t[threadID];}    
+	  
+    Thread* getThread(int threadID){return t[threadID];}    
 	
-	int CreateFile(char* filename); // fileSystem call
-  void PrintInt(int number); // print
+    int  CreateFile(char* filename); // fileSystem call
+    void PrintInt(int number);       // print
 
 // These are public for notational convenience; really, 
 // they're global variables used everywhere.
@@ -69,19 +65,19 @@ class Kernel {
 
   private:
 
-	Thread* t[10];
-	char*   execfile[10];
-  int threadProirity[10]; // new added
+	  Thread* t[10];
+	  char*   execfile[10];
+    int     filePriority[10]; // new added
 
-	int execfileNum;
-	int threadNum;
-    bool randomSlice;		// enable pseudo-random time slicing
-    bool debugUserProg;         // single step user program
-    double reliability;         // likelihood messages are dropped
-    char *consoleIn;            // file to read console input from
-    char *consoleOut;           // file to send console output to
+	  int execfileNum;
+	  int threadNum;
+    bool randomSlice;		 // enable pseudo-random time slicing
+    bool debugUserProg;  // single step user program
+    double reliability;  // likelihood messages are dropped
+    char *consoleIn;     // file to read console input from
+    char *consoleOut;    // file to send console output to
 #ifndef FILESYS_STUB
-    bool formatFlag;          // format the disk if this is true
+    bool formatFlag;     // format the disk if this is true
 #endif
 };
 

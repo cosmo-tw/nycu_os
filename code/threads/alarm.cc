@@ -48,8 +48,63 @@ Alarm::CallBack()
 {
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
+
+    int level = kernel->currentThread->getLevel();
+    if (status != IdleMode)
+    {
+        Aging();
+        if (level == 2)
+        {
+            if (!(kernel->scheduler->getQueue(1)->IsEmpty()))
+            {
+                interrupt->YieldOnReturn();
+            }
+        }
+        else
+        {
+            interrupt->YieldOnReturn();
+        }
+    }
     
     //if (status != IdleMode) {
 	//interrupt->YieldOnReturn();
     //}
+}
+
+
+void Alarm::Aging()
+{
+    for (int i = 1; i <= 3; i++)
+    {
+        List<Thread *> *queue = kernel->scheduler->getQueue(i);
+        ListIterator<Thread *> *it = new ListIterator<Thread *>(queue);
+        double time;
+        int prevPriority;
+        int nextLevel;
+        for (; !it->IsDone(); it->Next())
+        {
+            Thread *thread = it->Item();
+            thread->setTotalWaitingTime(thread->getTotalWaitingTime() +
+                                        kernel->stats->totalTicks - thread->getWaitingTime());
+            thread->setWaitingTime(kernel->stats->totalTicks);
+            time = thread->getTotalWaitingTime();
+            // aging mechanism
+            if (time >= 1500)
+            {
+                prevPriority = thread->getPriority();
+                thread->setPriority(min(prevPriority + 10, 149));
+                thread->setTotalWaitingTime(thread -> getTotalWaitingTime() - 1500);
+                nextLevel = thread->getLevel();
+                DEBUG(dbtwo, "[C] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] change itspriority from [" << prevPriority << "] to [" << thread->getPriority() << "]");
+                // change to higher level queue
+                if (nextLevel < i)
+                {
+                    DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is removed fromqueue L[" << i << "]");
+                    queue->Remove(thread);
+                    DEBUG(dbtwo, "[A] Tick [" << kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted intoqueue L[" << nextLevel << "]");
+                    ((SortedList<Thread *> *)kernel->scheduler->getQueue(nextLevel))->Insert(thread);
+                }
+            }
+        }
+    }
 }

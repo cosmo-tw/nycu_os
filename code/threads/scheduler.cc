@@ -28,19 +28,24 @@
 // 	Initialize the list of ready but not running threads.
 //	Initially, no ready threads.
 //----------------------------------------------------------------------
-int pqSchedulingCompare (Thread *x, Thread *y)
+int compareRemainingTime(Thread *x, Thread *y)
 {
-    if (x->getpriority() < y->getpriority()) { return 1; } // x has higher priority
-    else if (x->getpriority() > y->getpriority()) { return -1; } // y has higher priority
-    else { return 0; } // priorities are equal
+    if (x->getRemainingTime() == y->getRemainingTime()) return 0;
+    return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
+}
+int comparePriority(Thread *x, Thread *y)
+{
+    if (x->getPriority() == y->getPriority()) return 0;
+    return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
 
 
 Scheduler::Scheduler()
 { 
-    readyList = new List<Thread *>; 
-    pqList = new SortedList<Thread*>(pqSchedulingCompare);
     toBeDestroyed = NULL;
+    L1queue = new SortedList<Thread *>(compareRemainingTime);
+    L2queue = new SortedList<Thread *>(comparePriority);
+    L3queue = new List<Thread *>;
 } 
 
 //----------------------------------------------------------------------
@@ -50,8 +55,9 @@ Scheduler::Scheduler()
 
 Scheduler::~Scheduler()
 { 
-    delete readyList; 
-    delete pqList;
+    delete L1queue;
+    delete L2queue;
+    delete L3queue;
 } 
 
 //----------------------------------------------------------------------
@@ -68,17 +74,24 @@ Scheduler::ReadyToRun (Thread* thread)
     ASSERT(kernel->interrupt->getLevel() == IntOff);
     DEBUG(dbgThread, "Putting thread on ready list: " << thread->getName());
 	//cout << "Putting thread on ready list: " << thread->getName() << endl ;
+
+    thread->setWaitingTime(kernel->stats->totalTicks);
+    int level = thread->getLevel();
+    if (level == 1)
+    {
+        L1queue->Insert(thread);
+    }
+    else if (level == 2)
+    {
+        L2queue->Insert(thread);
+    }
+    else
+    {
+        L3queue->Append(thread);
+    }
+
     thread->setStatus(READY);
-    //readyList->Append(thread);
-    pqList->Insert(thread);
-    // cout<<" Thread of "<< thread->getName()<< " has priority-> "<<thread->getpriority()<<endl;
-     if( !pqList->IsInList(thread) )
-{
-        DEBUG(dbtwo, "[A] Tick ["<< kernel->stats->totalTicks << "]: Thread [" << thread->getID() << "] is inserted into queue")
-        pqList->Insert(thread);
-}
-
-
+    DEBUG(dbtwo, "[A] Tick [" << kernel->stats->totalTicks << "]:Thread [" << thread->getID() << "] is inserted into queue L[" << level << "]");
 }
 
 //----------------------------------------------------------------------
@@ -93,18 +106,32 @@ Thread *
 Scheduler::FindNextToRun ()
 {
     ASSERT(kernel->interrupt->getLevel() == IntOff);
+    int level;
+    Thread *nextThread = NULL;
 
-    if (pqList->IsEmpty()) {
-		return NULL;
-    } else {
-    	return pqList->RemoveFront();
+    if (!L1queue->IsEmpty())
+    {
+        nextThread = L1queue->RemoveFront();
+        level = 1;
     }
-    if (pqList->IsEmpty()) {
+    else if (!L2queue->IsEmpty())
+    {
+        nextThread = L2queue->RemoveFront();
+        level = 2;
+    }
+    else if (!L3queue->IsEmpty())
+    {
+        nextThread = L3queue->RemoveFront();
+        level = 3;
+    }
+    else
+    {
         return NULL;
-    } else {
-        DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << "]:Thread [" << pqList ->RemoveFront()->getID() << "] is removeed from queue");
-        return pqList ->RemoveFront();
     }
+    DEBUG(dbtwo, "[B] Tick [" << kernel->stats->totalTicks << 
+                 "]:Thread [" << nextThread->getID() << 
+                 "] is removed from queue L[" << level << "]");
+    return nextThread;
 
 }
 
@@ -154,17 +181,9 @@ Scheduler::Run (Thread *nextThread, bool finishing)
     // in switch.s.  You may have to think
     // a bit to figure out what happens after this, both from the point
     // of view of the thread and from the perspective of the "outside world".
-    DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
-                 "]:Thread [" << nextThread->getID() << 
-                 "] now selected for execution, thread [" <<
-                 oldThread->getID() << 
-                 "] is replaced, and it has executed [" << 
-                 kernel->stats->totalTicks - kernel->stats->prevTicks << 
-                 "] ticks");
-    //cout<< oldThread->getName() << " context switch to " << nextThread->getName() << "\n";
+    nextThread->setRunningTime(kernel->stats->totalTicks); // update running time
+    nextThread->setTotalWaitingTime(0);                    // reset total waiting time
     SWITCH(oldThread, nextThread);
-    kernel->stats->prevTicks = kernel->stats->totalTicks;
-    // SWITCH(oldThread, nextThread);
 
     // we're back, running oldThread
       

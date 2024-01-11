@@ -22,6 +22,16 @@ class Scheduler {
     Scheduler();		// Initialize list of ready threads 
     ~Scheduler();		// De-allocate ready list
 
+    List<Thread *> *getQueue(int level)
+    {
+      if (level == 1)
+        return L1queue;
+      else if (level == 2)
+        return L2queue;
+      else
+        return L3queue;
+    }
+
     void ReadyToRun(Thread* thread);	
     				// Thread can be dispatched.
     Thread* FindNextToRun();	// Dequeue first thread on the ready 
@@ -35,11 +45,13 @@ class Scheduler {
     // SelfTest for scheduler is implemented in class Thread
     
   private:
-    List<Thread *> *readyList;  // queue of threads that are ready to run,
-				// but not running
-    Thread *toBeDestroyed;	// finishing thread to be destroyed
-    				// by the next thread that runs
-    SortedList<Thread *> *pqList;
+    List<Thread *> *readyList;     // queue of threads that are ready to run, but not running
+    Thread *toBeDestroyed;	       // finishing thread to be destroyed
+    				                       // by the next thread that runs
+
+    SortedList<Thread *> *L1queue; // preemptive SJF scheduling
+    SortedList<Thread *> *L2queue; // non-preemptive prior
+    List<Thread *> *L3queue;
 };
 
 #endif // SCHEDULER_H

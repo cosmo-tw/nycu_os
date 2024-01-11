@@ -92,35 +92,54 @@ class Thread {
 
     // basic thread operations
 
-    void Fork(VoidFunctionPtr func, void *arg); 
-    				// Make thread run (*func)(arg)
-    void Yield();  		// Relinquish the CPU if any 
-				// other thread is runnable
-    void Sleep(bool finishing); // Put the thread to sleep and 
-				// relinquish the processor
-    void Begin();		// Startup code for the thread	
-    void Finish();  		// The thread is done executing
-    
-    void CheckOverflow();   	// Check if thread stack has overflowed
+    void Fork(VoidFunctionPtr func, void *arg); // Make thread run (*func)(arg)		
+    void Yield();  		                          // Relinquish the CPU if any other thread is runnable
+    void Sleep(bool finishing);                 // Put the thread to sleep and relinquish the processor
+    void Begin();		                            // Startup code for the thread	
+    void Finish();  		                        // The thread is done executing
+    void CheckOverflow();   	                  // Check if thread stack has overflowed
     void setStatus(ThreadStatus st) { status = st; }
     ThreadStatus getStatus() { return (status); }
-	char* getName() { return (name); }
+	  char* getName() { return (name); }
     
-	int getID() { return (ID); }
+	  int getID() { return (ID); }
     void Print() { cout << name; }
     void SelfTest();		// test whether thread impl is working
 
+    void setPriority(int p) { priority = p; }
+    int getPriority() { return priority; }
+    int getLevel() { return 3 - priority / 50; } // L1:1, L2:2, L3:3
+    void setBurstTime(double t) { burstTime = t; }
+    double getBurstTime() { return burstTime; }
+    void setPredictTime(double t) { predictTime = t; }
+    double getPredictTime() { return predictTime; }
+    void setRemainingTime(double t) { remainingTime = t; }
+    double getRemainingTime() { return remainingTime; }
+    void setRunningTime(double t) { runningTime = t; }
+    double getRunningTime() { return runningTime; }
+    void setWaitingTime(double t) { waitingTime = t; }
+    double getWaitingTime() { return waitingTime; }
+    void setTotalWaitingTime(double t) { totalWaitingTime = t; }
+    double getTotalWaitingTime() { return totalWaitingTime; }
+
   private:
     // some of the private data for this class is listed above
-    int priority;
-    int *stack; 	 	// Bottom of the stack 
-				// NULL if this is the main thread
-				// (If NULL, don't deallocate stack)
+
+    int *stack; 	 	      // Bottom of the stack NULL if this is the main thread (If NULL, don't deallocate stack)
     ThreadStatus status;	// ready, running or blocked
     char* name;
-	int   ID;
+
+    int    priority;         // scheduling priority (0~149)
+    double burstTime;        // accumulating job execution time
+    double predictTime;      // the predict time for next CPU burst
+    double remainingTime;    // remaining time
+    double runningTime;      // the time of entering the Running state
+    double waitingTime;      // the time of start waiting
+    double totalWaitingTime; // the total wating time
+
+	  int  ID;
     void StackAllocate(VoidFunctionPtr func, void *arg);
-    				// Allocate a stack for thread.
+    		// Allocate a stack for thread.
 				// Used internally by Fork()
 
 // A thread running a user program actually has *two* sets of CPU registers -- 
