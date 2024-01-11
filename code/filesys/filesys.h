@@ -67,8 +67,8 @@ class FileSystem {
         if (fileDescriptor == -1) return -1;
 
         for (int i=0; i<20; i++) {
-            if (OpenFileTable[i] == NULL) {
-                OpenFileTable[i] = new OpenFile(fileDescriptor);
+            if (fileDescriptorTable[i] == NULL) {
+                fileDescriptorTable[i] = new OpenFile(fileDescriptor);
                 return i+1;
             }
         }
@@ -76,7 +76,7 @@ class FileSystem {
     }
     int Write(char *buffer, int size, OpenFileId id){
          if(id > 20 or id < 1) return -1;
-        OpenFile *opFile = OpenFileTable[id-1];
+        OpenFile *opFile = fileDescriptorTable[id-1];
         if (opFile == NULL) return -1;
 
         int numWritten = opFile->Write(buffer, size);
@@ -84,7 +84,7 @@ class FileSystem {
     }
     int Read(char *buffer, int size, OpenFileId id){
         if(id > 20 or id < 1) return -1;
-        OpenFile *opFile = OpenFileTable[id-1];
+        OpenFile *opFile = fileDescriptorTable[id-1];
         if (opFile == NULL) return -1;
 
         int numRead = opFile->Read(buffer, size);
@@ -92,11 +92,11 @@ class FileSystem {
     }
     int Close(OpenFileId id){
         if(id > 20 or id < 1) return -1;
-        OpenFile *opFile = OpenFileTable[id-1];
+        OpenFile *opFile = fileDescriptorTable[id-1];
         if (opFile == NULL) return -1;
 
         delete opFile;
-        OpenFileTable[id-1] = NULL;
+        fileDescriptorTable[id-1] = NULL;
         return 1;
     }
 
