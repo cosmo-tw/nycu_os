@@ -40,7 +40,7 @@ int compareRemainingTime(Thread* x, Thread* y)
 int comparePriority(Thread* x, Thread* y)
 {
     if (x->getPriority() == y->getPriority()) return 0;
-    return (x->getPriority() < y->getPriority()) ? 1 : -1;
+    return (x->getPriority() < y->getPriority()) ? 1 : 0;
 }
 /*==================================================================================*/
 
@@ -103,7 +103,7 @@ Scheduler::ReadyToRun (Thread* thread)
     }
     else if (level == 2)
     {
-        cout<< "L2 insert" << thread->getName() << "\n";
+        cout<< "insert " << thread->getName() << "\n";
         L2ReadyList->Insert(thread);
     }
     else
