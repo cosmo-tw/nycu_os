@@ -37,7 +37,7 @@ int SysCreate(char *filename)
 /* This is new add function for HW Part2-1 */
 void SysPrintInt(int number)
 {
-	kernel->interrupt->PrintInt(number);
+	kernel->synchConsoleOut->PutInt(number);
 }
 
 /* This is new add function for HW Part2-2 */

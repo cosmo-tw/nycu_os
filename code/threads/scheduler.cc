@@ -34,13 +34,13 @@
 /* HW4 new add======================================================================= */
 int compareRemainingTime(Thread* x, Thread* y)
 {
-if (x->getRemainingTime() == y->getRemainingTime()) return 0;
-return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
+    if (x->getRemainingTime() == y->getRemainingTime()) return 0;
+    return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
 }
 int comparePriority(Thread* x, Thread* y)
 {
-if (x->getPriority() == y->getPriority()) return 0;
-return (x->getPriority() < y->getPriority()) ? 1 : -1;
+    if (x->getPriority() == y->getPriority()) return 0;
+    return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
 /*==================================================================================*/
 

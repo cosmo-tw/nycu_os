@@ -334,8 +334,3 @@ int Kernel::CreateFile(char *filename)
 	return fileSystem->Create(filename);
 }
 
-void Kernel::PrintInt(int number)
-{
-	return synchConsoleOut->PutInt(number);
-}
-

@@ -359,12 +359,6 @@ Interrupt::DumpState()
     cout << "\nEnd of pending interrupts\n";
 }
 
-void
-Interrupt::PrintInt(int number)
-{
-    kernel->PrintInt(number);
-}
-
 /* These are new add for HW2-2 */
 int
 Interrupt::OpenAFile(char *name)
