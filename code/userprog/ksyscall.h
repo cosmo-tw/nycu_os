@@ -26,6 +26,13 @@ int SysAdd(int op1, int op2)
   return op1 + op2;
 }
 
+/* This is new add function for HW Part2-1 */
+void SysPrintInt(int number)
+{
+	kernel->synchConsoleOut->PutInt(number);
+}
+
+/* This is new add function for HW Part2-2 */
 int SysCreate(char *filename)
 {
 	// return value
@@ -34,31 +41,24 @@ int SysCreate(char *filename)
 	return kernel->interrupt->CreateFile(filename);
 }
 
-/* This is new add function for HW Part2-1 */
-void SysPrintInt(int number)
-{
-	kernel->synchConsoleOut->PutInt(number);
-}
-
-/* This is new add function for HW Part2-2 */
-OpenFileId SysOpen(char *name)
+int SysOpen(char *name)
 {	
-	return kernel->interrupt->OpenAFile(name);
+	return kernel->fileSystem->OpenAFile(name);
 }
 
-int SysWrite(char *buffer, int size, OpenFileId id)
+int SysWrite(char *buffer, int size, int id)
 {
-	return kernel->interrupt->WriteAFile(buffer, size, id);
+	return kernel->fileSystem->Write(buffer, size, id);
 }
 
-int SysRead(char *buffer, int size, OpenFileId id)
+int SysRead(char *buffer, int size, int id)
 {
-  return kernel->interrupt->ReadAFile(buffer, size, id);
+  return kernel->fileSystem->Read(buffer, size, id);
 }
 
-int SysClose(OpenFileId id)
+int SysClose(int id)
 {
-  return kernel->interrupt->CloseAFile(id);
+  return kernel->fileSystem->Close(id);
 }
 
 #endif /* ! __USERPROG_KSYSCALL_H__ */

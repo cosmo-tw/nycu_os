@@ -360,56 +360,56 @@ Interrupt::DumpState()
 }
 
 /* These are new add for HW2-2 */
-int
-Interrupt::OpenAFile(char *name)
-{
-    int fileDescriptor = OpenForReadWrite(name, FALSE);
+// int
+// Interrupt::OpenAFile(char *name)
+// {
+//     int fileDescriptor = OpenForReadWrite(name, FALSE);
 
-    /* 偵錯機制(未確認可以成功) */
-    if (fileDescriptor < 0)
-        return -1;
-    else
-        return fileDescriptor;
-}
+//     /* 偵錯機制(未確認可以成功) */
+//     if (fileDescriptor < 0)
+//         return -1;
+//     else
+//         return fileDescriptor;
+// }
 
-int 
-Interrupt::WriteAFile(char *buffer, int size, int id)
-{
-    /* 偵錯機制(未確認可以成功) */
-    if( id < 0 )
-        return -1;
-    else
-    {
-        WriteFile(id, buffer, size);
-        return size;
-    }
-}
+// int 
+// Interrupt::WriteAFile(char *buffer, int size, int id)
+// {
+//     /* 偵錯機制(未確認可以成功) */
+//     if( id < 0 )
+//         return -1;
+//     else
+//     {
+//         WriteFile(id, buffer, size);
+//         return size;
+//     }
+// }
 
-int
-Interrupt::ReadAFile(char *buffer, int size, int id)
-{
-    /* 偵錯機制(未確認可以成功) */
-    if( id < 0 )
-        return -1;
-    else
-    {
-        Read(id, buffer, size);
-        return size;
-    }
-}
+// int
+// Interrupt::ReadAFile(char *buffer, int size, int id)
+// {
+//     /* 偵錯機制(未確認可以成功) */
+//     if( id < 0 )
+//         return -1;
+//     else
+//     {
+//         Read(id, buffer, size);
+//         return size;
+//     }
+// }
 
-int
-Interrupt::CloseAFile(int id)
-{
-    if (id < 0)
-        return 0;
+// int
+// Interrupt::CloseAFile(int id)
+// {
+//     if (id < 0)
+//         return 0;
 
-    /* Close()如果沒關檔成功，返還的是小於0的值 */
-    int success = Close(id);
+//     /* Close()如果沒關檔成功，返還的是小於0的值 */
+//     int success = Close(id);
 
-     /* 偵錯機制(未確認可以成功) */
-    if (success < 0)
-        return 0;
-    else
-        return 1;
-}
+//      /* 偵錯機制(未確認可以成功) */
+//     if (success < 0)
+//         return 0;
+//     else
+//         return 1;
+// }
