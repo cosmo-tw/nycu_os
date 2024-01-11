@@ -40,6 +40,8 @@
 #ifdef FILESYS_STUB 		// Temporarily implement file system calls as 
 				// calls to UNIX, until the real file system
 				// implementation is available
+typedef int OpenFileId;
+
 class FileSystem {
   public:
     FileSystem() { for (int i = 0; i < 20; i++) fileDescriptorTable[i] = NULL; }
