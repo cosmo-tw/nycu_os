@@ -210,9 +210,9 @@ Thread::Yield ()
     double time = (double)kernel->stats->totalTicks - getRunningTime();
     setBurstTime(getBurstTime() + time);
     setRemainingTime(getRemainingTime() - time);
-    
-    nextThread = kernel->scheduler->FindNextToRun();
     kernel->scheduler->ReadyToRun(this);
+    nextThread = kernel->scheduler->FindNextToRun();
+    
     if (nextThread != NULL) {
         DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
                      "]: Thread [" << nextThread->getID() << 

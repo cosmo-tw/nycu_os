@@ -29,7 +29,8 @@
 //	Initially, no ready threads.
 //----------------------------------------------------------------------
 int compareRemainingTime(Thread *x, Thread *y)
-{
+{   
+    cout<< "remaintime work\n";
     if (x->getRemainingTime() == y->getRemainingTime()) return 0;
     return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
 }
