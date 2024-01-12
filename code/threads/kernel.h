@@ -62,7 +62,6 @@ class Kernel {
     PostOfficeOutput *postOfficeOut;
 
     int hostName;            // machine identifier
-    int threadPriority[10];  // HW4 new added
 
   private:
 
