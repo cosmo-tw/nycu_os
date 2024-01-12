@@ -27,11 +27,7 @@ class Scheduler {
       if (level == 1)
         return L1queue;
       else if (level == 2)
-      {
-        cout<< "L2\n";
         return L2queue;
-      }
-        
       else
         return L3queue;
     }

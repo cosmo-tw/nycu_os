@@ -55,7 +55,6 @@ Alarm::CallBack()
         Aging();
         if (level == 2)
         {
-            cout<< "aging L2\n";
             if (!(kernel->scheduler->getQueue(1)->IsEmpty()))
             {
                 interrupt->YieldOnReturn();
