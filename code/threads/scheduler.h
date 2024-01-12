@@ -49,9 +49,8 @@ class Scheduler {
     Thread *toBeDestroyed;	       // finishing thread to be destroyed
     				                       // by the next thread that runs
 
-    SortedList<Thread *> *L2queue; // non-preemptive prior
     SortedList<Thread *> *L1queue; // preemptive SJF scheduling
-    // SortedList<Thread *> *L2queue; // non-preemptive prior
+    SortedList<Thread *> *L2queue; // non-preemptive prior
     List<Thread *> *L3queue;
 };
 

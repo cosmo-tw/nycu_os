@@ -36,6 +36,7 @@ int compareRemainingTime(Thread *x, Thread *y)
 }
 int comparePriority(Thread *x, Thread *y)
 {
+    cout<< "Priority work\n";
     if (x->getPriority() == y->getPriority()) return 0;
     return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
@@ -45,7 +46,7 @@ Scheduler::Scheduler()
 { 
     toBeDestroyed = NULL;
     
-    L1queue = new SortedList<Thread *>(compareRemainingTime);
+    L1queue = new SortedList<Thread *>(comparePriority);
     L2queue = new SortedList<Thread *>(compareRemainingTime);
     L3queue = new List<Thread *>;
 } 
