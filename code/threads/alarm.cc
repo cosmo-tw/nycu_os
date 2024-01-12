@@ -50,26 +50,25 @@ Alarm::CallBack()
     MachineStatus status = interrupt->getStatus();
 
     int level = kernel->currentThread->getLevel();
-    if (status != IdleMode)
-    {
-        Aging();
-        if (level == 2)
-        {
-            if (!(kernel->scheduler->getQueue(1)->IsEmpty()))
-            {
-                interrupt->YieldOnReturn();
-            }
-        }
-        else if (level == 3)
-        {
-            if (!(kernel->scheduler->getQueue(2)->IsEmpty()))
-                interrupt->YieldOnReturn();
-        }
-    }
+    // if (status != IdleMode)
+    // {
+    //     Aging();
+    //     if (level == 2)
+    //     {
+    //         if (!(kernel->scheduler->getQueue(1)->IsEmpty()))
+    //         {
+    //             interrupt->YieldOnReturn();
+    //         }
+    //     }
+    //     else
+    //     {
+    //         interrupt->YieldOnReturn();
+    //     }
+    // }
     
-    //if (status != IdleMode) {
-	//interrupt->YieldOnReturn();
-    //}
+    if (status != IdleMode) {
+	interrupt->YieldOnReturn();
+    }
 }
 
 void Alarm::Aging()
