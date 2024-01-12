@@ -45,12 +45,13 @@ class Scheduler {
     // SelfTest for scheduler is implemented in class Thread
     
   private:
-    List<Thread *> *readyList;     // queue of threads that are ready to run, but not running
+    // List<Thread *> *readyList;     // queue of threads that are ready to run, but not running
     Thread *toBeDestroyed;	       // finishing thread to be destroyed
     				                       // by the next thread that runs
 
-    SortedList<Thread *> *L1queue; // preemptive SJF scheduling
     SortedList<Thread *> *L2queue; // non-preemptive prior
+    SortedList<Thread *> *L1queue; // preemptive SJF scheduling
+    // SortedList<Thread *> *L2queue; // non-preemptive prior
     List<Thread *> *L3queue;
 };
 
