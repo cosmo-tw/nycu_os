@@ -46,8 +46,8 @@ Scheduler::Scheduler()
 { 
     toBeDestroyed = NULL;
     
-    L1queue = new SortedList<Thread *>(comparePriority);
-    L2queue = new SortedList<Thread *>(compareRemainingTime);
+    L1queue = new SortedList<Thread *>(compareRemainingTime);
+    L2queue = new SortedList<Thread *>(comparePriority);
     L3queue = new List<Thread *>;
 } 
 

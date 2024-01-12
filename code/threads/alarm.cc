@@ -60,9 +60,10 @@ Alarm::CallBack()
                 interrupt->YieldOnReturn();
             }
         }
-        else
+        else if (level == 3)
         {
-            interrupt->YieldOnReturn();
+            if (!(kernel->scheduler->getQueue(2)->IsEmpty()))
+                interrupt->YieldOnReturn();
         }
     }
     
