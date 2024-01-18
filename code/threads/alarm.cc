@@ -55,7 +55,7 @@ Alarm::CallBack()
         Aging();
         if (level == 2)
         {
-            if (!(kernel->scheduler->getQueue(1)->IsEmpty()))
+            if ((kernel->scheduler->getQueue(1)->IsEmpty()))
             {
                 interrupt->YieldOnReturn();
             }
