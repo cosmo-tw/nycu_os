@@ -52,7 +52,7 @@ int comparePriority(Thread *x, Thread *y)
 
     if (x->getPriority() == y->getPriority()) 
         return 0;
-    else if (x->getPriority() < y->getPriority())
+    else if (x->getPriority() > y->getPriority())
     {
         if(flag==1)
         {
