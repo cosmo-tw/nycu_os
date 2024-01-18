@@ -35,10 +35,33 @@ int compareRemainingTime(Thread *x, Thread *y)
     return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
 }
 int comparePriority(Thread *x, Thread *y)
-{
+{   
+    int flag = 0;
+    int priority = x->getPriority();
+
     // cout<< "Priority work\n";
-    if (x->getPriority() == y->getPriority()) return 1;
-    return (x->getPriority() < y->getPriority()) ? 1 : -1;
+    if (x->getPriority() == y->getPriority())
+    {
+        flag = 1;
+        x->setPriority( priority+1 );
+    }
+
+    if (x->getPriority() == y->getPriority()) 
+        return 0;
+    else if (x->getPriority() < y->getPriority())
+    {
+        if(flag==1)
+            x->setPriority( priority-1 );
+        
+        return 1;
+    }
+    else if (x->getPriority() < y->getPriority())
+    {        
+        return -1;
+    } 
+
+    // if (x->getPriority() == y->getPriority()) return 0;
+    // return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
 
 
