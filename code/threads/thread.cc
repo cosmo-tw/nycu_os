@@ -266,7 +266,7 @@ Thread::Sleep (bool finishing)
     DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
                  "]: Thread [" << ID << 
                  "] update approximate burst time, from: [" << getPredictTime() << 
-                 "], add [" << getBurstTime() << "], to [" << nextPredictTime << "]");
+                 "], add [" << -getBurstTime() << "], to [" << -nextPredictTime << "]");
     setPredictTime(nextPredictTime);
     setRemainingTime(nextPredictTime);
     double prevBusrtTime = getBurstTime();
@@ -280,7 +280,7 @@ Thread::Sleep (bool finishing)
     DEBUG(dbtwo, "[E] Tick [" << kernel->stats->totalTicks << 
                  "]: Thread [" << nextThread->getID() << 
                  "] is now selected for excution, thread [" << ID << 
-                 "] is replaced, and it has excuted [" << prevBusrtTime << "] ticks");
+                 "] is replaced, and it has excuted [" << -prevBusrtTime << "] ticks");
     kernel->scheduler->Run(nextThread, finishing); 
 }
 

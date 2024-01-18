@@ -36,13 +36,15 @@ int compareRemainingTime(Thread *x, Thread *y)
 }
 int comparePriority(Thread *x, Thread *y)
 {   
-    // int priority = y->getPriority();
+    int priority = y->getPriority();
+    int flag = 0;
 
-    // if (x->getPriority() == y->getPriority())
-    // {
-    //     priority+=1;
-    //     y->setPriority( priority );
-    // }
+    if (x->getPriority() == y->getPriority())
+    {
+        flag =1 ;
+        priority+=1;
+        y->setPriority( priority );
+    }
 
     if (x->getPriority() == y->getPriority()) 
         return 0;
@@ -52,6 +54,12 @@ int comparePriority(Thread *x, Thread *y)
     }
     else if (x->getPriority() < y->getPriority())
     {       
+        if(flag == 1)
+        {
+            flag =0 ;
+            priority-=1;
+            y->setPriority( priority );
+        }
         return 1;
     } 
 
