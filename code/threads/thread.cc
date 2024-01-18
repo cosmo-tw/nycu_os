@@ -258,7 +258,8 @@ Thread::Sleep (bool finishing)
 	//cout << "debug Thread::Sleep " << name << "wait for Idle\n";
 
     double time = (double)kernel->stats->totalTicks - getRunningTime();
-    setBurstTime(time - getBurstTime());
+    // setBurstTime(time - getBurstTime());
+    setBurstTime(getBurstTime() - time);
     double nextPredictTime = (double)getBurstTime() * 0.5 +
                              getPredictTime() * 0.5;
     DEBUG(dbtwo, "[D] Tick [" << kernel->stats->totalTicks << 
