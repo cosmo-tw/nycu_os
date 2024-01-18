@@ -295,6 +295,7 @@ int Kernel::Exec(char* name, int priority)
 	t[threadNum] = new Thread(name, threadNum);
 	t[threadNum]->space = new AddrSpace();
 	t[threadNum]->Fork((VoidFunctionPtr) &ForkExecute, (void *)t[threadNum]);
+    cout<< "set priority\n";
     t[threadNum]->setPriority(priority);
 	threadNum++;
 	
