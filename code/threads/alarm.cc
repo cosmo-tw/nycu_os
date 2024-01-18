@@ -53,16 +53,15 @@ Alarm::CallBack()
     if (status != IdleMode)
     {
         Aging();
-        if (level == 2)
+        if (level == 1)
         {
-            if ((kernel->scheduler->getQueue(1)->IsEmpty()))
+            if (kernel->currentThread->getID() > 0)
             {
                 interrupt->YieldOnReturn();
             }
         }
-        else 
+        else if (level == 3)
         {
-            cout<<"else";
             interrupt->YieldOnReturn();
         }
     }
