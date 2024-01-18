@@ -45,6 +45,7 @@ int comparePriority(Thread *x, Thread *y)
     {
         flag = 1;
         x->setPriority( priority+1 );
+        priority+=1;
     }
 
     cout<< "c_x_priority = " << x->getPriority() << "\n";
