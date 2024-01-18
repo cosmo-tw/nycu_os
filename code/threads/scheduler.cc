@@ -30,13 +30,13 @@
 //----------------------------------------------------------------------
 int compareRemainingTime(Thread *x, Thread *y)
 {   
-    cout<< "remaintime work\n";
+    // cout<< "remaintime work\n";
     if (x->getRemainingTime() == y->getRemainingTime()) return 0;
     return (x->getRemainingTime() > y->getRemainingTime()) ? 1 : -1;
 }
 int comparePriority(Thread *x, Thread *y)
 {
-    cout<< "Priority work\n";
+    // cout<< "Priority work\n";
     if (x->getPriority() == y->getPriority()) return 0;
     return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
@@ -80,6 +80,8 @@ Scheduler::ReadyToRun (Thread* thread)
 
     thread->setWaitingTime(kernel->stats->totalTicks);
     int level = thread->getLevel();
+
+    cout<< thread->getName() << "'s priority is " << thread->getPriority() << " (" << level <<") \n";
     if (level == 1)
     {
         L1queue->Insert(thread);
