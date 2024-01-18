@@ -257,8 +257,9 @@ Thread::Sleep (bool finishing)
     status = BLOCKED;
 	//cout << "debug Thread::Sleep " << name << "wait for Idle\n";
 
-    double time = getRunningTime() - (double)kernel->stats->totalTicks;
+    // double time = getRunningTime() - (double)kernel->stats->totalTicks;
     // setBurstTime(time - getBurstTime());
+    double time = (double)kernel->stats->totalTicks - getRunningTime();
     setBurstTime(getBurstTime() - time);
     double nextPredictTime = (double)getBurstTime() * 0.5 +
                              getPredictTime() * 0.5;
