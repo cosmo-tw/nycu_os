@@ -38,34 +38,34 @@ int comparePriority(Thread *x, Thread *y)
 {   
     int flag = 0;
     int priority = x->getPriority();
-    cout<< "x_priority = " << x->getPriority() << "\n";
-    cout<< "y_priority = " << y->getPriority() << "\n";
-    // cout<< "Priority work\n";
-    if (x->getPriority() == y->getPriority())
-    {
-        flag = 1;
-        x->setPriority( priority+1 );
-    }
+    // cout<< "x_priority = " << x->getPriority() << "\n";
+    // cout<< "y_priority = " << y->getPriority() << "\n";
+    // // cout<< "Priority work\n";
+    // if (x->getPriority() == y->getPriority())
+    // {
+    //     flag = 1;
+    //     x->setPriority( priority+1 );
+    // }
 
-    cout<< "c_x_priority = " << x->getPriority() << "\n";
-    cout<< "c_y_priority = " << y->getPriority() << "\n";
+    // cout<< "c_x_priority = " << x->getPriority() << "\n";
+    // cout<< "c_y_priority = " << y->getPriority() << "\n";
 
-    if (x->getPriority() == y->getPriority()) 
-        return 0;
-    else if (x->getPriority() < y->getPriority())
-    {
-        if(flag==1)
-            x->setPriority( priority-1 );
+    // if (x->getPriority() == y->getPriority()) 
+    //     return 0;
+    // else if (x->getPriority() < y->getPriority())
+    // {
+    //     if(flag==1)
+    //         x->setPriority( priority-1 );
         
-        return 1;
-    }
-    else if (x->getPriority() < y->getPriority())
-    {        
-        return -1;
-    } 
+    //     return 1;
+    // }
+    // else if (x->getPriority() < y->getPriority())
+    // {        
+    //     return -1;
+    // } 
 
-    // if (x->getPriority() == y->getPriority()) return 0;
-    // return (x->getPriority() < y->getPriority()) ? 1 : -1;
+    if (x->getPriority() == y->getPriority()) return 0;
+    return (x->getPriority() < y->getPriority()) ? 1 : -1;
 }
 
 
