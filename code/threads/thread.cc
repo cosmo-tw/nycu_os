@@ -98,8 +98,6 @@ Thread::Fork(VoidFunctionPtr func, void *arg)
     DEBUG(dbgThread, "Forking thread: " << name << " f(a): " << (int) func << " " << arg);
     StackAllocate(func, arg);
 
-    cout<< "fork\n";
-
     oldLevel = interrupt->SetLevel(IntOff);
     scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts 
 					// are disabled!

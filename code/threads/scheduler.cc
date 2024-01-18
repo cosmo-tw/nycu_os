@@ -81,7 +81,7 @@ Scheduler::ReadyToRun (Thread* thread)
     thread->setWaitingTime(kernel->stats->totalTicks);
     int level = thread->getLevel();
 
-    cout<< thread->getName() << "'s priority is " << thread->getPriority() << " (" << level <<") \n";
+    // cout<< thread->getName() << "'s priority is " << thread->getPriority() << " (" << level <<") \n";
     if (level == 1)
     {
         L1queue->Insert(thread);
