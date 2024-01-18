@@ -210,6 +210,9 @@ Thread::Yield ()
     double time = (double)kernel->stats->totalTicks - getRunningTime();
     setBurstTime(getBurstTime() + time);
     setRemainingTime(getRemainingTime() - time);
+
+    cout<< "yeild\n";
+
     kernel->scheduler->ReadyToRun(this);
     nextThread = kernel->scheduler->FindNextToRun();
     
