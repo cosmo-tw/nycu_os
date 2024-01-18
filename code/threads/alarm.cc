@@ -48,20 +48,21 @@ Alarm::CallBack()
 {
     Interrupt *interrupt = kernel->interrupt;
     MachineStatus status = interrupt->getStatus();
-
+    Aging();
     int level = kernel->currentThread->getLevel();
     if (status != IdleMode)
     {
-        Aging();
-        if (level == 1)
+        
+        if (level == 2)
         {
-            if (kernel->currentThread->getID() > 0)
+            if ((kernel->scheduler->getQueue(1)->IsEmpty()))
             {
                 interrupt->YieldOnReturn();
             }
         }
-        else if (level == 3)
+        else 
         {
+            cout<<"else";
             interrupt->YieldOnReturn();
         }
     }
